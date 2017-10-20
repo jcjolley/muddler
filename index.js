@@ -1,7 +1,10 @@
-#!/bin/env node
+#!/usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const program = require('commander');
 const ClosureCompiler = require('google-closure-compiler').compiler;
+console.log('Externs: ', path.dirname(__filename) + '/externs.js');
+console.log('Externs: ', __dirname + '/externs.js');
 program.version('0.1.0')
     .usage('[options] <file to muddle>')
     .option('-o, --outfile [value]', 'The name of the output file')
@@ -18,7 +21,6 @@ const infile = fs.readFileSync(filename, 'utf8');
 const outfile = nameFirstFunction(replaceInStr('#', '$', infile));
 console.log("Before closure: ", outfile);
 fs.writeFileSync("temp.js", outfile);
-console.log('Externs: ', __dirname + '/externs.js');
 const compiler = new ClosureCompiler({
     js: "temp.js",
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
