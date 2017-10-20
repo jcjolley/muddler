@@ -24,6 +24,7 @@ const outfile = nameFirstFunction(replaceInStr('#', '$', infile))
 console.log("Before closure: ", outfile)
 fs.writeFileSync("temp.js", outfile)
 
+console.log ('Externs: ', __dirname + '/externs.js');
 const compiler = new ClosureCompiler({
     js: "temp.js",
     compilation_level: 'ADVANCED_OPTIMIZATIONS',

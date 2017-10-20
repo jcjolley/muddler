@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/bin/env node
 const fs = require('fs');
 const program = require('commander');
 const ClosureCompiler = require('google-closure-compiler').compiler;
@@ -18,17 +18,18 @@ const infile = fs.readFileSync(filename, 'utf8');
 const outfile = nameFirstFunction(replaceInStr('#', '$', infile));
 console.log("Before closure: ", outfile);
 fs.writeFileSync("temp.js", outfile);
+console.log('Externs: ', __dirname + '/externs.js');
 const compiler = new ClosureCompiler({
     js: "temp.js",
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     language_in: 'ECMASCRIPT6',
     language_out: 'ECMASCRIPT6',
-    externs: 'externs.js',
+    externs: __dirname + '/externs.js',
     warning_level: 'QUIET',
 });
 compiler.run((exitCode, stdOut, stdErr) => {
     console.log("Closure Output:", JSON.stringify(stdOut));
     const out = anonymizeFirstFunction(replaceInStr('\\\$', '#', stdOut));
-    fs.writeFileSync(program.outfile || program.args[0], out);
+    fs.writeFileSync(program.outfile || filename, out);
     console.error(stdErr);
 });
