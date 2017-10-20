@@ -1,6 +1,6 @@
 {
   "name": "muddler",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A minifier for hackmud scripts",
   "main": "index.js",
   "repository": {
