@@ -39,8 +39,8 @@ const compiler = new ClosureCompiler({
 
 compiler.run((exitCode, stdOut, stdErr) => {
     console.log("Closure Output:", JSON.stringify(stdOut))
-    const out = anonymizeFirstFunction(replaceInStr('\\\$', '#', stdOut))
-    fs.writeFileSync(program.outfile || filename, out)
+    const out = anonymizeFirstFunction(replaceInStr('\\\$', '#', stdOut)).slice(0, -1)
+    fs.writeFileSync(program.outfile || "min.js", out)
 
     console.error(stdErr);
 })
