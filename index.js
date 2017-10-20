@@ -1,10 +1,9 @@
 #!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 const ClosureCompiler = require('google-closure-compiler').compiler;
-console.log('Externs: ', path.dirname(__filename) + '/externs.js');
-console.log('Externs: ', __dirname + '/externs.js');
 program.version('0.1.0')
     .usage('[options] <file to muddle>')
     .option('-o, --outfile [value]', 'The name of the output file')
