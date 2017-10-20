@@ -1,5 +1,5 @@
 {
-  "name": "muddle",
+  "name": "muddler",
   "version": "1.0.0",
   "description": "A minifier for hackmud scripts",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": "./index.js",
+  "bin": {"muddle": "./index.js"},
   "author": "jolleyboy",
   "license": "ISC",
   "dependencies": {
