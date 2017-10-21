@@ -38,7 +38,7 @@ I think this is the most useful option.
 
 Will watch the current working directory for changes to *.ts and *.js files and write *_mud.js files to the current directory
 
-## Caveat
+## Caveats
 * If you wish to preserve your object property names, provide them as strings
 * I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue in github and I'll fix it asap.
 
