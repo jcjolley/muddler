@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
@@ -7,7 +8,11 @@ const ts = require('typescript');
 const tsconfig = require('./tsconfig.json');
 const rm = require('rimraf');
 const watch = require('watch');
+const testFile = require('./run-tests').testFile
+const silentReporter = require('mocha-silent-reporter')
+const chalk = require('chalk')
 let isFirstWatchRun = true;
+
 const parseArgs = () => {
     program.version('0.1.0')
         .usage('[options] <file to muddle>')
@@ -16,11 +21,13 @@ const parseArgs = () => {
         .option('-W, --watch-dir <directory>', 'watch the provided directory for changes')
         .option('-d, --out-dir <directory>', 'what directory to save files to')
         .option('-v, --verbose', 'increase program verbosity. Good for debugging, or checking for sneaky hacks.')
-        .option('-q, --quiet', 'disable all program output', )
+        .option('-q, --quiet', 'disable all program output')
+        .option('-s, --skip-tests', 'skip tests if they exist')
+
         .parse(process.argv);
 
     if (program.verbose && program.quiet) {
-        console.log("Be quiet, AND be verbose, eh?  You're drunk.  Go home.")
+        console.log("Be quiet, AND be verbose, eh?  You're " + muddleStr('drunk') + ".  Go home.")
         process.exit(1);
     }
 }
@@ -32,7 +39,7 @@ const replaceInStr = (a, b, str) => str.split('\n')
 const prepareTs = filename => {
     tsconfig.compilerOptions.module = 'ES2015';
     const fileStr = fs.readFileSync(filename, 'utf8');
-    let preparedTs = nameFirstFunction(replaceInStr('#', '$', fileStr));
+    let preparedTs = addToGlobal(nameFirstFunction(replaceInStr('#', '$', fileStr)));
     let js = ts.transpileModule(preparedTs, tsconfig).outputText;
     if (program.verbose)
         console.log("Prepared Js: ", js);
@@ -45,13 +52,19 @@ const getFilenameSansExt = (filename) => {
     return path.basename(filename, ext);
 };
 
-const nameFirstFunction = str => "window['JolleysMinifier']=" + str;
+const muddleStr = str => {
+    const colors = ['blue', 'magenta', 'magentaBright', 'blueBright']
+    return str.split('').map(c => chalk[colors[getRandomInt(0, colors.length)]](c)).join('')
+}
 
-const anonymizeFirstFunction = str => str.replace(/^.*=f/, "f");
+const nameFirstFunction = str => str.replace(/^.*\(/, "function muddled(");
+const addToGlobal = str => str + '\nwindow["muddled"] = muddled;'
+
+const anonymizeFirstFunction = str => str.replace(/^.*?\(/, "function(");
 
 const prepareJs = filename => {
     const fileStr = fs.readFileSync(filename, 'utf8');
-    const preparedJs = nameFirstFunction(replaceInStr('#', '$', fileStr));
+    const preparedJs = addToGlobal(nameFirstFunction(replaceInStr('#', '$', fileStr)));
     if (program.verbose)
         console.log("Prepared Js: ", preparedJs);
     const outname = getOutFilename(filename);
@@ -86,9 +99,10 @@ const minifyAndWrite = (compiler, filename) => compiler.run((exitCode, stdOut, s
     const filteredStdErr = filterStdErr(stdErr);
 
     if (filteredStdErr) {
-        console.error(filteredStdErr);
+        const separator = "\n==========================================\n"
+        console.error(separator + chalk.red(filteredStdErr) + separator);
     } else if (!program.quiet) {
-        console.log(`Success! ${filename} has been muddled. Happy hacking`);
+        console.log(chalk.green(`Success`) + ' - ' + chalk.italic(`${filename}_mud.js`));
     }
 
     cleanup(filename);
@@ -103,7 +117,7 @@ const setupWatch = () => {
                 return false;
             }
 
-            const rejects = ['_mud.js', '.temp.js', 'muddle.ts', 'muddle.js', 'externs.js'];
+            const rejects = ['_mud.js', '.temp.js', '.test.', 'muddle.ts', 'muddle.js', 'externs.js', 'run-tests'];
             const reject = rejects.some(x => filename.includes(x));
 
             return !reject;
@@ -115,8 +129,8 @@ const setupWatch = () => {
     const dir = program.watchDir ? path.normalize(program.watchDir) : __dirname;
 
     if (!program.quiet)
-        console.log(`Watching ${dir} for TypeScript/JavaScript files`);
-        
+        console.log(chalk.cyan(`\nWatching ${dir}\n`));
+
     watch.watchTree(dir, options, (f, c, p) => {
         if (isFirstWatchRun) {
             isFirstWatchRun = false;
@@ -141,19 +155,53 @@ const getOutFilename = (filename) => {
     return outname;
 };
 
-const processFile = (filename) => {
+const test = async filename => {
+    if (fs.existsSync(`${filename}.test.js`)) {
+        if (!program.quiet)
+            console.log(chalk.cyanBright('Testing') + ` - ${filename}.test.js`)
+        const reporter = getReporter();
+        const failures = await testFile(`${filename}.test.js`, reporter)
+        return failures
+    }
+}
+
+const getReporter = () => {
+    if (program.verbose)
+        return 'spec';
+    if (program.quiet)
+        return function reporter(runner) { }
+    return silentReporter
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+const processFile = async (filename) => {
     if (!program.quiet)
-        console.log('Muddling', filename);
+        console.log(muddleStr('Muddling'), filename);
     const ext = path.extname(filename);
     (ext === '.ts') ? prepareTs(filename) : prepareJs(filename);
     const basename = getOutFilename(filename);
+
+    if (!program.skipTests) {
+        const numFailures = await test(basename);
+        if (numFailures > 0) {
+            console.log(chalk.red(`Failure`) + ' - ' + filename + ` - ` + chalk.bgRed(numFailures) + ` failing test(s)`)
+            cleanup(filename)
+            return;
+        }
+    }
+
     const compiler = getCompiler(basename);
     minifyAndWrite(compiler, basename);
 };
 
 function main() {
     parseArgs();
-    if (program.watch || program.watchDir) {
+    if (program.watch || program.watchDir || !program.args[0]) {
         setupWatch();
     }
     else {
