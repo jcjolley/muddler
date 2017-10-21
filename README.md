@@ -41,7 +41,7 @@ Will watch the current working directory for changes to *.ts and *.js files, run
 
 `muddle <filename>`
 
-Will test \<filename\>.test.js, and then write minified \<filename\>_mud.js files to the current directory
+Will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory
 
 ## Caveats
 * If you wish to preserve your object property names, provide them as strings
