@@ -23,12 +23,15 @@ Usage: muddle [options] \<file to muddle\>
     -q, --quiet                    disable all program output
     -h, --help                     output usage information
 
-Examples: 
+Examples:
+
 `muddle -W C:\dev\hackmud -d C:\User\1337H4x0r\AppData\Roaming\hackmud\1337H4x0r\scripts`
+
 Will watch C:\dev\hackmud for changes to *.ts and *.js files, and then write *_mud.js files to your hackmud folder.
 I think this is the most useful option.
 
 `muddle -w`
+
 Will watch the current working directory for changes to *.ts and *.js files and write *_mud.js files to the current directory
 
 ## Caveat
