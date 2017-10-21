@@ -8,7 +8,6 @@ const testFile = (filename, reporter) => {
         const mocha = new Mocha({reporter: reporter});
         mocha.addFile(filename);
 
-
         return new Promise((resolve, reject) =>
             mocha.run(failures => {
                 resolve(failures);

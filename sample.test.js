@@ -1,7 +1,6 @@
 require("chai").should()
-//const td = require('testdouble');
 const fs = require('fs');
-const window = {}
+const window = {};
 const code = fs.readFileSync('sample.temp.js', 'utf8').toString()
 eval(code);
 

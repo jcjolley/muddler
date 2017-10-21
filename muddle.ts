@@ -5,7 +5,7 @@ const path = require('path');
 const program = require('commander');
 const ClosureCompiler = require('google-closure-compiler').compiler;
 const ts = require('typescript');
-const tsconfig = require('./tsconfig.json');
+const tsconfig = require('../tsconfig.json');
 const rm = require('rimraf');
 const watch = require('watch');
 const testFile = require('./run-tests').testFile
@@ -126,7 +126,7 @@ const setupWatch = () => {
         ignoreNotPermitted: true,
     };
 
-    const dir = program.watchDir ? path.normalize(program.watchDir) : __dirname;
+    const dir = program.watchDir ? path.normalize(program.watchDir) : process.cwd();
 
     if (!program.quiet)
         console.log(chalk.cyan(`\nWatching ${dir}\n`));

@@ -1,6 +1,6 @@
 # muddle
-Transpile and Minify your [hackmud](https://www.hackmud.com/) scripts ( [TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/) ) with ease.
-Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes) (10/21/2017)
+Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ( [TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/) ) with ease.
+Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
 ## Prerequisites 
 This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and [Google's Closure Compiler](https://dl.google.com/closure-compiler/compiler-latest.zip) on your [PATH](http://windowsitpro.com/systems-management/how-can-i-add-new-folder-my-system-path) to function.
@@ -12,7 +12,7 @@ This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/do
 ## Usage
 
 ```
-Usage: muddle [options] <file to muddle>
+ Usage: muddle [options] <file to muddle>
 
   Options:
 
@@ -23,6 +23,7 @@ Usage: muddle [options] <file to muddle>
     -d, --out-dir <directory>    what directory to save files to
     -v, --verbose                increase program verbosity. Good for debugging, or checking for sneaky hacks.
     -q, --quiet                  disable all program output
+    -s, --skip-tests             skip tests if they exist
     -h, --help                   output usage information
 
 ```
@@ -31,19 +32,25 @@ Examples:
 
 `muddle -W C:\dev\hackmud -d C:\User\1337H4x0r\AppData\Roaming\hackmud\1337H4x0r\scripts`
 
-Will watch C:\dev\hackmud for changes to *.ts and *.js files, and then write *_mud.js files to your hackmud folder.
+Will watch C:\dev\hackmud for changes to *.ts and *.js files, run any *.test.js files, and then write *_mud.js files to your hackmud folder.
 I think this is the most useful option.
 
-`muddle -w`
+`muddle`
 
-Will watch the current working directory for changes to *.ts and *.js files and write *_mud.js files to the current directory
+Will watch the current working directory for changes to *.ts and *.js files, run any *.test and write *_mud.js files to the current directory
+
+`muddle <filename>`
+
+Will test <filename>.test.js, and then write minified <filename>_mud.js files to the current directory
 
 ## Caveats
 * If you wish to preserve your object property names, provide them as strings
 * I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue in github and I'll fix it asap.
+* For now, if you want to do testing, you have to save the test files in the same folder as your .ts/.js scripts.  
 
 ## Credits
 This project was inspired by [Gerow's Mudify](https://github.com/gerow/mudify) which isn't maintained (@gerow on hackmud).
+The testing portion of the project was blatantly stolen from [Jer0ge's hackmud-unit-poc](https://github.com/jer0ge/hackmud-unit-poc)
 
 I'm typically playing as @s1mply_me on [hackmud](https://www.hackmud.com/) and am Jolley in the [Discord channel](https://discord.gg/sc6gVse)
 Feel free to hit me up (or even send some sweet sweet GC my way ;) )
