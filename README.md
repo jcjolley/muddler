@@ -1,6 +1,6 @@
 # muddle
-Transpile and Minify your [hackmud](https://www.hackmud.com/) [TypeScript](https://www.typescriptlang.org/) / [JavaScript](https://www.javascript.com/) scripts with ease.
-Works up to [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes) (10/21/2017)
+Transpile and Minify your [hackmud](https://www.hackmud.com/) scripts ( [TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/) ) with ease.
+Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes) (10/21/2017)
 
 ## Prerequisites 
 This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and [Google's Closure Compiler](https://dl.google.com/closure-compiler/compiler-latest.zip) on your [PATH](http://windowsitpro.com/systems-management/how-can-i-add-new-folder-my-system-path) to function.
@@ -10,18 +10,22 @@ This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/do
 `npm install muddler -g`
 
 ## Usage
-Usage: muddle [options] \<file to muddle\>
+
+```
+Usage: muddle [options] <file to muddle>
 
   Options:
 
-    -V, --version                  output the version number
-    -o, --out-file \<filename\>    the name of the output file
-    -w, --watch                    watch the current directory for changes
-    -W, --watch-dir \<directory\>  watch the provided directory for changes
-    -d, --out-dir \<directory\>    what directory to save files to
-    -v, --verbose                  increase program verbosity. Good for debugging, or checking for sneaky hacks.
-    -q, --quiet                    disable all program output
-    -h, --help                     output usage information
+    -V, --version                output the version number
+    -o, --out-file <filename>    the name of the output file
+    -w, --watch                  watch the current directory for changes
+    -W, --watch-dir <directory>  watch the provided directory for changes
+    -d, --out-dir <directory>    what directory to save files to
+    -v, --verbose                increase program verbosity. Good for debugging, or checking for sneaky hacks.
+    -q, --quiet                  disable all program output
+    -h, --help                   output usage information
+
+```
 
 Examples:
 
