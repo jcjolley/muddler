@@ -1,8 +1,8 @@
 {
   "name": "muddler",
-  "version": "1.0.11",
+  "version": "1.1.1",
   "description": "A minifier for hackmud scripts",
-  "main": "index.js",
+  "main": "muddle.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jcjolley/muddle.git"
@@ -10,11 +10,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": {"muddle": "./index.js"},
+  "bin": {
+    "muddle": "./muddle.js"
+  },
   "author": "jolleyboy",
   "license": "ISC",
   "dependencies": {
     "commander": "^2.11.0",
-    "google-closure-compiler": "^20170910.0.0"
-  }
+    "file-extension": "^3.1.2",
+    "google-closure-compiler": "^20170910.0.0",
+    "rimraf": "^2.6.2",
+    "typescript": "^2.5.3",
+    "watch": "^1.0.2"
+  },
+  "devDependencies": {}
 }

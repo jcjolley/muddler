@@ -1,0 +1,1 @@
+function(a,b){a=#fs.scripts.lib();a.log("Blargh");return{a:a.get_log()}}

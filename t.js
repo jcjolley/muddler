@@ -1,1 +1,0 @@
-function(a,b){a=#s.scripts.lib();a.log("Blargh");a.is_valid_name("Blarg2");a.a("test");return{msg:a.get_log()}}
