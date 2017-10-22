@@ -37,14 +37,14 @@ I think this is the most useful option.
 
 `muddle`
 
-Will watch the current working directory for changes to *.ts and *.js files, run any *.test and write *_mud.js files to the current directory
+Will watch the current working directory for changes to *.ts and *.js files, run any *.test and write *_mud.js files to the current directory.
 
 `muddle <filename>`
 
-Will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory
+Will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
 
 ## Testing
-If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js
+If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js.
 I'll hopefully add support for writing tests in TypeScript someday, but today is not that day.
 Write unit tests as you normally would for Mocha, with the following exceptions:
 * anywhere you would use '#', use '$' instead.
@@ -66,16 +66,16 @@ e.g.
 ```
 
 ## Caveats
-* If you wish to preserve your object property names, provide them as strings
+* If you wish to preserve your object property names, provide them as strings.
 * I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue in github and I'll fix it asap.
 * For now, if you want to do testing, you have to save the test files in the same folder as your .ts/.js scripts.  
 
 ## Credits
 This project was inspired by [Gerow's Mudify](https://github.com/gerow/mudify) which isn't maintained (@gerow on hackmud).
-The testing portion of the project was blatantly stolen from [Jer0ge's hackmud-unit-poc](https://github.com/jer0ge/hackmud-unit-poc)
+The testing portion of the project was blatantly stolen from [Jer0ge's hackmud-unit-poc](https://github.com/jer0ge/hackmud-unit-poc).
 
 I'm typically playing as @s1mply_me on [hackmud](https://www.hackmud.com/) and am Jolley in the [Discord channel](https://discord.gg/sc6gVse)
-Feel free to hit me up (or even send some sweet sweet GC my way ;) )
+Feel free to hit me up (or even send some sweet sweet GC my way ;) ).
 
 ## What's next?
 
