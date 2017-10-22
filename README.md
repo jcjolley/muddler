@@ -66,6 +66,7 @@ e.g.
 ```
 
 ## Caveats
+* The Clojure Compiler (SEPT 2017 version) is still working to support all of es6.  One thing they do NOT support yet is array destructuring.  You'll have to manually edit your script to rename your variables to non clashing variables if you use destructuring.  
 * If you wish to preserve your object property names, provide them as strings.
 * I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue in github and I'll fix it asap.
 * For now, if you want to do testing, you have to save the test files in the same folder as your .ts/.js scripts.  
