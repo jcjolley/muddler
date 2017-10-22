@@ -26,6 +26,7 @@ const parseArgs = () => {
         .option('-w, --watch', 'watch the current directory for changes')
         .option('-W, --watch-dir <directory>', 'watch the provided directory for changes')
         .option('-d, --out-dir <directory>', 'what directory to save files to')
+        .option('-c, --config <filename>', 'the location of your config file (defaults to muddle.json in the current directory)')
         .option('-v, --verbose', 'increase program verbosity. Good for debugging, or checking for sneaky hacks.')
         .option('-q, --quiet', 'disable all program output')
         .option('-s, --skip-tests', 'skip tests if they exist')
@@ -34,7 +35,7 @@ const parseArgs = () => {
         console.log("Be quiet, AND be verbose, eh?  You're " + muddleStr('drunk') + ".  Go home.");
         process.exit(1);
     }
-    const configFilename = path.join(process.cwd(), 'muddle.json');
+    const configFilename = program.config ? path.normalize(program.config) : path.join(process.cwd(), 'muddle.json');
     if (fs.existsSync(configFilename)) {
         const config = JSON.parse(fs.readFileSync(configFilename, 'utf8'));
         const settings = Object.assign({}, config, program);
