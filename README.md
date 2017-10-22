@@ -41,7 +41,7 @@ Will watch the current working directory for changes to *.ts and *.js files, run
 
 `muddle <filename>`
 
-Will test \<filename\>.test.js, and then write minified \<filename\>_mud.js files to the current directory
+Will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory
 
 ## Testing
 If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js
