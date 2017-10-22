@@ -42,13 +42,17 @@ const parseArgs = () => {
         program = settings;
     }
 };
-const replaceInStr = (a, b, str) => str.split('\n')
-    .map(line => line.replace(new RegExp(a, "g"), b))
-    .join('\n');
+const replaceInStrIfScriptor = (a, b, str) => {
+    const scriptors = ['s\.', 'fs\.', 'ms\.', 'ls\.', 'ns\.', '4s\.', '3s\.', '2s\.', '1s\.'];
+    const lookahead = `(?=${scriptors.join('|')})`;
+    return str.split('\n')
+        .map(line => line.replace(new RegExp(`${a}${lookahead}`, "g"), b))
+        .join('\n');
+};
 const prepareTs = filename => {
     tsconfig.compilerOptions.module = 'ES2015';
     const fileStr = fs.readFileSync(filename, 'utf8');
-    let preparedTs = addToGlobal(nameFirstFunction(replaceInStr('#', '$', fileStr)));
+    let preparedTs = addToGlobal(nameFirstFunction(replaceInStrIfScriptor('#', '$', fileStr)));
     let js = ts.transpileModule(preparedTs, tsconfig).outputText;
     if (program.verbose)
         console.log("Prepared Js: ", js);
@@ -68,7 +72,7 @@ const addToGlobal = str => str + '\nwindow["muddled"] = muddled;';
 const anonymizeFirstFunction = str => str.replace(/^.*?\(/, "function(");
 const prepareJs = filename => {
     const fileStr = fs.readFileSync(filename, 'utf8');
-    const preparedJs = addToGlobal(nameFirstFunction(replaceInStr('#', '$', fileStr)));
+    const preparedJs = addToGlobal(nameFirstFunction(replaceInStrIfScriptor('#', '$', fileStr)));
     if (program.verbose)
         console.log("Prepared Js: ", preparedJs);
     const outname = getOutFilename(filename);
@@ -93,7 +97,7 @@ const filterStdErr = str => str.split('\n')
 const minifyAndWrite = (compiler, filename) => compiler.run((exitCode, stdOut, stdErr) => {
     if (program.verbose)
         console.log("Closure Output:", JSON.stringify(stdOut));
-    const out = anonymizeFirstFunction(replaceInStr('\\\$', '#', stdOut)).slice(0, -2);
+    const out = anonymizeFirstFunction(replaceInStrIfScriptor('\\\$', '#', stdOut)).slice(0, -2);
     fs.writeFileSync(`${filename}_mud.js`, out);
     const filteredStdErr = filterStdErr(stdErr);
     if (filteredStdErr) {
