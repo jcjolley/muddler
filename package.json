@@ -1,13 +1,22 @@
 {
   "name": "muddler",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "description": "A minifier for hackmud scripts",
   "main": "muddle.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jcjolley/muddler.git"
   },
-  "keywords": ["hackmud", "closure compiler", "minifier", "muddle", "TypeScript", "testing", "unit test"],
+  "bugs": "https://github.com/jcjolley/muddler/issues",
+  "keywords": [
+    "hackmud",
+    "closure compiler",
+    "minifier",
+    "muddle",
+    "TypeScript",
+    "testing",
+    "unit test"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
