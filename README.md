@@ -41,7 +41,7 @@ This will watch the current working directory for changes to *.ts and *.js files
 
 `muddle <filename>`
 
-this will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
+This will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
 
 ## Testing
 If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js.
@@ -66,16 +66,16 @@ e.g.
 ```
 
 ## Caveats
-* The Clojure Compiler (SEPT 2017 version) is still working to support all of es6.  One thing they do NOT support yet is array destructuring.  You'll have to manually edit your script to rename your variables to non clashing variables if you use destructuring.  
+* The Clojure Compiler (v20170910) is still working to support all of es6.  One thing they do NOT support yet is array destructuring.  You'll have to manually edit your script to rename your variables to non-clashing variables if you use destructuring.  
 * If you wish to preserve your object property names, provide them as strings.
-* I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue in github and I'll fix it asap.
+* I haven't tested this with scripts that use the DB.  If you run into problems, please make an issue on the github repo and I'll fix it asap.
 * For now, if you want to do testing, you have to save the test files in the same folder as your .ts/.js scripts.  
 
 ## Credits
-This project was inspired by [Gerow's Mudify](https://github.com/gerow/mudify) which isn't maintained (@gerow on hackmud).
+This project was inspired by [Gerow's Mudify](https://github.com/gerow/mudify). (@gerow on hackmud).
 The testing portion of the project was blatantly stolen from [Jer0ge's hackmud-unit-poc](https://github.com/jer0ge/hackmud-unit-poc).
 
-I'm typically playing as @s1mply_me on [hackmud](https://www.hackmud.com/) and am Jolley in the [Discord channel](https://discord.gg/sc6gVse)
+I'm typically playing as @s1mply_me on [hackmud](https://www.hackmud.com/) go by Jolley in the [Discord channel](https://discord.gg/sc6gVse)
 Feel free to hit me up (or even send some sweet sweet GC my way ;) ).
 
 ## What's next?
