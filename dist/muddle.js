@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const fs = require('fs');
 const path = require('path');
-const program = require('commander');
+let program = require('commander');
 const ClosureCompiler = require('google-closure-compiler').compiler;
 const ts = require('typescript');
 const tsconfig = require('../tsconfig.json');
@@ -33,6 +33,12 @@ const parseArgs = () => {
     if (program.verbose && program.quiet) {
         console.log("Be quiet, AND be verbose, eh?  You're " + muddleStr('drunk') + ".  Go home.");
         process.exit(1);
+    }
+    const configFilename = path.join(process.cwd(), 'muddle.json');
+    if (fs.existsSync(configFilename)) {
+        const config = JSON.parse(fs.readFileSync(configFilename, 'utf8'));
+        const settings = Object.assign({}, config, program);
+        program = settings;
     }
 };
 const replaceInStr = (a, b, str) => str.split('\n')
