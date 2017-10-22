@@ -55,7 +55,7 @@ Write unit tests as you normally would for Mocha, with the following exceptions:
 See [sample.test.js](https://github.com/jcjolley/muddle/blob/master/sample.test.js) for simple example of testing
 
 ## Config file
-Create a `muddle.json` file in your hackmud scripts directory to muddle your life.
+Create a `muddle.json` file in your development directory (!!not AppData/hackmud/user/scripts !!) muddle your life.
 The available settings are the options for the program, but camelCased instead of kebab-cased.
 e.g.
 ```
