@@ -1,5 +1,5 @@
 # muddle
-Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ( [TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/) ) with ease.
+Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ([TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/)) with ease.
 Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
 ## Prerequisites 
@@ -32,16 +32,16 @@ Examples:
 
 `muddle -W C:\dev\hackmud -d C:\User\1337H4x0r\AppData\Roaming\hackmud\1337H4x0r\scripts`
 
-Will watch C:\dev\hackmud for changes to *.ts and *.js files, run any *.test.js files, and then write *_mud.js files to your hackmud folder.
+This will watch C:\dev\hackmud for changes to *.ts and *.js files, run any *.test.js files, and then write *_mud.js files to your hackmud folder.
 I think this is the most useful option.
 
 `muddle`
 
-Will watch the current working directory for changes to *.ts and *.js files, run any *.test and write *_mud.js files to the current directory.
+This will watch the current working directory for changes to *.ts and *.js files, run any *.test and write *_mud.js files to the current directory.
 
 `muddle <filename>`
 
-Will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
+this will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
 
 ## Testing
 If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js.
