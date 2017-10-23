@@ -12,7 +12,7 @@ describe('Muddler', () => {
             }
             promise = processFile({}, 'examples/sample.ts')
         })
-        it('should create a <filename>_mud.js file', async () => {
+        it('should create a sample_mud.js file', async () => {
             await promise;
             fs.existsSync('sample_mud.js').should.equal(true)
         })
