@@ -1,5 +1,8 @@
-
 module.exports = (function () {
+    const {muddleStr, getOutFilename} = require('./utils');
+    const transpile = require('./transpile');
+    const test = require('./testing')
+    const compile = require('./closure')
 
     return async function processFile(program, filename) {
         if (!program.quiet)
@@ -12,7 +15,7 @@ module.exports = (function () {
         const failed = await test(program, filename, basename)
 
         if (!failed) {
-            compile(program, basename)
+            await compile(program, basename)
         }
     };
 })()

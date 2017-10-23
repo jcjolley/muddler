@@ -60,7 +60,7 @@ module.exports = (function () {
         return __awaiter(this, void 0, void 0, function* () {
             const compiler = getCompiler(basename);
             const out = yield minify(program, compiler, basename);
-            fs.writeFile(`${basename}_mud.js`, out, 'utf8', writeCb(basename));
+            fs.writeFileSync(`${basename}_mud.js`, out, 'utf8');
         });
     };
 })();

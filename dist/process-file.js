@@ -7,6 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 module.exports = (function () {
+    const { muddleStr, getOutFilename } = require('./utils');
+    const transpile = require('./transpile');
+    const test = require('./testing');
+    const compile = require('./closure');
     return function processFile(program, filename) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!program.quiet)
@@ -15,7 +19,7 @@ module.exports = (function () {
             transpile(program, filename, basename);
             const failed = yield test(program, filename, basename);
             if (!failed) {
-                compile(program, basename);
+                yield compile(program, basename);
             }
         });
     };

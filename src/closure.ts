@@ -61,6 +61,6 @@ module.exports = (function () {
     return async function compile(program, basename) {
         const compiler = getCompiler(basename);
         const out = await minify(program, compiler, basename)
-        fs.writeFile(`${basename}_mud.js`, out, 'utf8', writeCb(basename))
+        fs.writeFileSync(`${basename}_mud.js`, out, 'utf8')
     }
 })()
