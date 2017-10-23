@@ -10,7 +10,7 @@ describe('Muddler', () => {
             if (fs.existsSync('sample_mud.js')) {
                 rm.sync('sample_mud.js')
             }
-            promise = processFile({}, 'C:\\Users\\jolle\\Documents\\dev\\muddle\\examples\\sample.ts')
+            promise = processFile({}, 'examples/sample.ts')
         })
         it('should create a <filename>_mud.js file', async () => {
             await promise;
