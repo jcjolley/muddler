@@ -1,5 +1,5 @@
 function (context, args) {
     const l = #fs.scripts.lib()
-    l.log('test')
+    l.log('testing')
     return l.get_log()
 }
