@@ -2,6 +2,25 @@
 Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ([TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/)) with ease.
 Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
+## Changelog
+### [Unreleased]
+
+### [1.4.0] - 2017-10-23
+#### Added
+- Support for 'test' directory (must be in the directory you call muddle in).  Tests still need to follow the `<filename>.test.js` format
+
+#### Changed
+- Moved from manual IIFE and AMD modules to regular TS syntax and compiling to commonjs modules.  I was an idiot.  I've seen the light.
+- Added a create-externs.ts to generate a much more comprehensive externs.js file
+- Broke a few things into smaller functions
+
+#### Fixed
+- Bug where tests not in the cwd weren't being picked up by muddle.
+
+[All changes this version](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0)
+Full changelog can be found [here](https://github.com/jcjolley/muddler/blob/master/CHANGELOG.md)
+
+
 ## Prerequisites 
 This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and [Google's Closure Compiler](https://dl.google.com/closure-compiler/compiler-latest.zip) on your [PATH](http://windowsitpro.com/systems-management/how-can-i-add-new-folder-my-system-path) to function.
 

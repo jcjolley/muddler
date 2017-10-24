@@ -1,7 +1,8 @@
 const should = require("chai").should()
 const fs = require('fs')
 const rm = require('rimraf')
-const processFile = require('../dist/process-file');
+const {processFile} = require('../dist/process-file');
+
 var promise;
 
 describe('Muddler', () => {
