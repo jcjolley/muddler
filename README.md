@@ -63,6 +63,8 @@ This will watch the current working directory for changes to *.ts and *.js files
 This will test \<filename\>.test.js, and then write a minified \<filename\>_mud.js to the current directory.
 
 ## Testing
+**[New Feature]** If you don't want to clutter up your scripts folder with tests, you can now create a `test` directory to store your tests in.  You still need to follow the `<filename>.test.js` naming convention.
+
 If you wish to unit test your files, create a test file with the same name as your script, but with an extension of .test.js.
 I'll hopefully add support for writing tests in TypeScript someday, but today is not that day.
 Write unit tests as you normally would for Mocha, with the following exceptions:
