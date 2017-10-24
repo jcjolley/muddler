@@ -3,9 +3,9 @@ Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) script
 Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
 ## Changelog
-### [Unreleased]
+### [Unreleased](https://github.com/jcjolley/muddler/compare/v1.4.0...HEAD)
 
-### [1.4.0] - 2017-10-23
+### [1.4.0](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0) - 2017-10-23
 #### Added
 - Support for 'test' directory (must be in the directory you call muddle in).  Tests still need to follow the `<filename>.test.js` format
 
@@ -17,9 +17,8 @@ Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/article
 #### Fixed
 - Bug where tests not in the cwd weren't being picked up by muddle.
 
-[All changes this version](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0)
 Full changelog can be found [here](https://github.com/jcjolley/muddler/blob/master/CHANGELOG.md)
-[Unreleased]: https://github.com/jcjolley/muddler/compare/v1.4.0...HEAD
+
 
 ## Prerequisites 
 This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and [Google's Closure Compiler](https://dl.google.com/closure-compiler/compiler-latest.zip) on your [PATH](http://windowsitpro.com/systems-management/how-can-i-add-new-folder-my-system-path) to function.
