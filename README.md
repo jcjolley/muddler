@@ -2,11 +2,9 @@
 Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ([TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/)) with ease.
 Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
-## Changelog
+## Changelog - most recent entry
 
 <div style="border: 1px solid grey; padding: 20px">
-
-### [Unreleased](https://github.com/jcjolley/muddler/compare/v1.4.0...HEAD)
 
 ### [1.4.0](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0) - 2017-10-23
 #### Added
