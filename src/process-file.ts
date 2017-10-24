@@ -1,21 +1,19 @@
-module.exports = (function () {
-    const {muddleStr, getOutFilename} = require('./utils');
-    const transpile = require('./transpile');
-    const test = require('./testing')
-    const compile = require('./closure')
+import { muddleStr, getOutFilename } from './utils';
+import { transpile } from './transpile';
+import { test } from './testing'
+import { compile } from './closure'
 
-    return async function processFile(program, filename) {
-        if (!program.quiet)
-            console.log(muddleStr('Muddling'), filename);
+export async function processFile(program, filename) {
+    if (!program.quiet)
+        console.log(muddleStr('Muddling'), filename);
 
-        const basename = getOutFilename(program, filename);
+    const basename = getOutFilename(program, filename);
 
-        transpile(program, filename, basename)
+    transpile(program, filename, basename)
 
-        const failed = await test(program, filename, basename)
+    const failed = await test(program, filename, basename)
 
-        if (!failed) {
-            await compile(program, basename)
-        }
-    };
-})()
+    if (!failed) {
+        await compile(program, basename)
+    }
+}

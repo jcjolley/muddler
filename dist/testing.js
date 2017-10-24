@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6,50 +7,67 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-module.exports = (function () {
-    const Mocha = require('mocha');
-    const fs = require('fs');
-    const path = require('path');
-    const silentReporter = require('mocha-silent-reporter');
-    const { cleanup } = require('./utils');
-    const chalk = require('chalk');
-    const testFile = (filename, reporter) => {
-        if (filename.includes('.test.js')) {
-            const output = [];
-            const mocha = new Mocha({ reporter: reporter });
-            mocha.addFile(filename);
-            return new Promise((resolve, reject) => mocha.run(failures => {
-                resolve(failures);
-            }));
+Object.defineProperty(exports, "__esModule", { value: true });
+const Mocha = require("mocha");
+const fs = require("fs");
+const path = require("path");
+const silentReporter = require("mocha-silent-reporter");
+const utils_1 = require("./utils");
+const chalk_1 = require("chalk");
+const testFile = (filename, reporter) => {
+    if (filename.includes('.test.js')) {
+        const output = [];
+        const mocha = new Mocha({ reporter: reporter });
+        mocha.addFile(filename);
+        return new Promise((resolve, reject) => mocha.run(failures => {
+            resolve(failures);
+        }));
+    }
+};
+const getReporter = (program) => {
+    if (program.verbose)
+        return 'spec';
+    if (program.quiet)
+        return function reporter(runner) { };
+    return silentReporter;
+};
+const getTestName = (filename, basename) => {
+    let test_basename = filename.slice(0, -path.extname(filename).length);
+    const testFilename = `${test_basename}.test.js`;
+    if (fs.existsSync(testFilename)) {
+        return testFilename;
+    }
+    return getTestDirFilename(basename);
+};
+const getTestDirFilename = (basename) => {
+    const testDir = path.join(process.cwd(), 'test');
+    if (fs.existsSync(testDir)) {
+        const newTestFilename = path.join(testDir, `${basename}.test.js`);
+        if (fs.existsSync(newTestFilename)) {
+            return newTestFilename;
         }
-    };
-    const getReporter = (program) => {
-        if (program.verbose)
-            return 'spec';
-        if (program.quiet)
-            return function reporter(runner) { };
-        return silentReporter;
-    };
-    const doTest = (program, filename) => __awaiter(this, void 0, void 0, function* () {
-        let testFilename = `${filename}.test.js`;
-        if (fs.existsSync(testFilename)) {
-            if (!program.quiet)
-                console.log(chalk.cyanBright('Testing') + ` - ${testFilename}`);
-            const reporter = getReporter(program);
-            const failures = yield testFile(testFilename, reporter);
-            return failures;
+    }
+};
+const doTest = (program, filename, basename) => __awaiter(this, void 0, void 0, function* () {
+    const testFilename = getTestName(filename, basename);
+    if (testFilename) {
+        if (!program.quiet)
+            console.log(chalk_1.default.cyanBright('Testing') + ` - ${testFilename}`);
+        const reporter = getReporter(program);
+        const failures = yield testFile(testFilename, reporter);
+        return failures;
+    }
+});
+function test(program, filename, basename) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!program.skipTests) {
+            const numFailures = yield doTest(program, filename, basename);
+            if (numFailures > 0) {
+                console.log(chalk_1.default.red(`Failure`) + ' - ' + filename + ` - ` + chalk_1.default.bgRed(numFailures) + ` failing test(s)`);
+                utils_1.cleanup(filename);
+            }
+            return numFailures;
         }
     });
-    return function test(program, filename, basename) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!program.skipTests) {
-                const numFailures = yield doTest(program, basename);
-                if (numFailures > 0) {
-                    console.log(chalk.red(`Failure`) + ' - ' + filename + ` - ` + chalk.bgRed(numFailures) + ` failing test(s)`);
-                    cleanup(filename);
-                }
-                return numFailures;
-            }
-        });
-    };
-})();
+}
+exports.test = test;

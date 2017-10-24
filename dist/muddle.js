@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-const parseArgs = require('./cli');
-const setupWatch = require('./muddle-watch');
-const processFile = require('./process-file');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const cli_1 = require("./cli");
+const muddle_watch_1 = require("./muddle-watch");
+const process_file_1 = require("./process-file");
 function main() {
-    const program = parseArgs();
+    const program = cli_1.parseArgs();
     let filename = program.args[0];
     if (program.watch || program.watchDir || !filename) {
-        setupWatch(program, processFile);
+        muddle_watch_1.setupWatch(program, process_file_1.processFile);
     }
     else {
-        processFile(program, filename);
+        process_file_1.processFile(program, filename);
     }
 }
 main();

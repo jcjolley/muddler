@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6,21 +7,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-module.exports = (function () {
-    const { muddleStr, getOutFilename } = require('./utils');
-    const transpile = require('./transpile');
-    const test = require('./testing');
-    const compile = require('./closure');
-    return function processFile(program, filename) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!program.quiet)
-                console.log(muddleStr('Muddling'), filename);
-            const basename = getOutFilename(program, filename);
-            transpile(program, filename, basename);
-            const failed = yield test(program, filename, basename);
-            if (!failed) {
-                yield compile(program, basename);
-            }
-        });
-    };
-})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = require("./utils");
+const transpile_1 = require("./transpile");
+const testing_1 = require("./testing");
+const closure_1 = require("./closure");
+function processFile(program, filename) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!program.quiet)
+            console.log(utils_1.muddleStr('Muddling'), filename);
+        const basename = utils_1.getOutFilename(program, filename);
+        transpile_1.transpile(program, filename, basename);
+        const failed = yield testing_1.test(program, filename, basename);
+        if (!failed) {
+            yield closure_1.compile(program, basename);
+        }
+    });
+}
+exports.processFile = processFile;

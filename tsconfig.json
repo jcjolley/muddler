@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",                    
-    "module": "amd",
+    "module": "commonjs",
     "outDir": "dist",
     "moduleResolution": "node",         
     "lib": ["es7", "dom"],              
