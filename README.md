@@ -44,7 +44,7 @@ This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/do
     -w, --watch                  watch the current directory for changes
     -W, --watch-dir <directory>  watch the provided directory for changes
     -d, --out-dir <directory>    what directory to save files to
-    -c, --config <filename>      the location of your config file (defaults to muddle.json in the current directory)
+    -c, --config <filename>      the location of your config file (defaults to muddle.json in the cwd)
     -v, --verbose                increase program verbosity. Good for debugging, or checking for sneaky hacks.
     -q, --quiet                  disable all program output
     -s, --skip-tests             skip tests if they exist
