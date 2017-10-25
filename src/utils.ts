@@ -3,7 +3,7 @@ import rm = require('rimraf')
 import path = require('path')
 
 export const cleanup = (filename) => {
-    rm(`${filename}.temp.js`, [], x => x);
+    rm.sync(`${filename}.temp.js`);
 };
 
 export const muddleStr = str => {

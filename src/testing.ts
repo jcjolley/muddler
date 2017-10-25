@@ -9,13 +9,17 @@ const testFile = (filename, reporter) => {
     if (filename.includes('.test.js')) {
         const output = [];
         const mocha = new Mocha({ reporter: reporter });
+        delete require.cache[filename]
         mocha.addFile(filename);
 
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve, reject) => {
             mocha.run(failures => {
-                resolve(failures);
+                process.on('exit', (code) => {
+                    resolve(failures);
+                    process.exit(code || failures + 20)
+                })
             })
-        )
+        })
     }
 };
 
@@ -56,6 +60,7 @@ const doTest = async (program, filename, basename) => {
         const failures = await testFile(testFilename, reporter)
         return failures
     }
+    return -1
 }
 
 export async function test(program, filename, basename) {
@@ -64,6 +69,11 @@ export async function test(program, filename, basename) {
         if (numFailures > 0) {
             console.log(chalk.red(`Failure`) + ' - ' + filename + ` - ` + chalk.bgRed(numFailures) + ` failing test(s)`)
             cleanup(filename)
+        }
+        if (numFailures == -1) {
+            if (program.verbose) {
+                console.log(chalk.yellow(`No Tests Found`) + ' - ' + filename)
+            }
         }
         return numFailures
     }

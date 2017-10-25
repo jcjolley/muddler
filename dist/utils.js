@@ -4,7 +4,7 @@ const chalk_1 = require("chalk");
 const rm = require("rimraf");
 const path = require("path");
 exports.cleanup = (filename) => {
-    rm(`${filename}.temp.js`, [], x => x);
+    rm.sync(`${filename}.temp.js`);
 };
 exports.muddleStr = str => {
     const colors = ['blue', 'magenta', 'magentaBright', 'blueBright'];
