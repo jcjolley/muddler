@@ -26,6 +26,11 @@ exports.replaceInStrIfScriptor = (a, b, str) => {
         .join('\n');
 };
 exports.anonymizeFirstFunction = str => str.replace(/^.*?\(/, "function(");
+exports.isChildOf = (child, parent) => {
+    const c = path.resolve(child);
+    const p = path.resolve(parent);
+    return (c !== p) && p.split(path.sep).every((t, i) => c.split(path.sep)[i] === t);
+};
 const getFilenameSansExt = (filename) => {
     const ext = path.extname(filename);
     return path.basename(filename, ext);

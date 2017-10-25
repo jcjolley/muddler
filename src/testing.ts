@@ -28,18 +28,18 @@ const getReporter = (program) => {
     return silentReporter
 }
 
-const getTestName = (filename: string, basename) => {
+const getTestName = (program, filename: string, basename) => {
     let test_basename = filename.slice(0, -path.extname(filename).length)
     const testFilename = `${test_basename}.test.js`;
     if (fs.existsSync(testFilename)) {
         return testFilename
     }
 
-    return getTestDirFilename(basename)
+    return getTestDirFilename(program, basename)
 }
 
-const getTestDirFilename = (basename) => {
-    const testDir = path.join(process.cwd(), 'test')
+const getTestDirFilename = (program, basename) => {
+    const testDir = program.testDir ? program.testDir : path.join(process.cwd(), 'test')
     if (fs.existsSync(testDir)) {
         const newTestFilename = path.join(testDir, `${basename}.test.js`)
         if (fs.existsSync(newTestFilename)) {
@@ -49,7 +49,7 @@ const getTestDirFilename = (basename) => {
 }
 
 const doTest = async (program, filename, basename) => {
-    const testFilename = getTestName(filename, basename);
+    const testFilename = getTestName(program, filename, basename);
     if (testFilename) {
         if (!program.quiet)
             console.log(chalk.cyanBright('Testing') + ` - ${testFilename}`)

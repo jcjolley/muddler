@@ -15,6 +15,7 @@ export function parseArgs() {
         .option('-v, --verbose', 'increase program verbosity. Good for debugging, or checking for sneaky hacks.')
         .option('-q, --quiet', 'disable all program output')
         .option('-s, --skip-tests', 'skip tests if they exist')
+        .option('-t, --test-dir <directory>', 'the directory to search for tests.')
 
         .parse(process.argv);
 

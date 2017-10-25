@@ -2,6 +2,7 @@ import watch = require('watch');
 import chalk from 'chalk'
 import path = require('path');
 import fs = require('fs');
+import { isChildOf } from './utils';
 
 const getWatchOptions = () => {
     return {
@@ -18,7 +19,7 @@ const watchFilter = filename => {
         return false;
     }
 
-    const rejects = ['_mud.js', '.temp.js',  'muddle.ts', 'muddle.js', 'externs.js', 'run-tests'];
+    const rejects = ['_mud.js', '.temp.js', 'muddle.ts', 'muddle.js', 'externs.js', 'run-tests'];
     const reject = rejects.some(x => filename.includes(x));
 
     return !reject;
@@ -46,11 +47,26 @@ const getWatchFn = (program, processFile) => (f, c, p) => {
     if (typeof f === 'object') {
         const files = Object.keys(f).slice(1);
         files.forEach(file => {
-            if (!file.includes('.test.js')) 
+            if (!file.includes('.test.js'))
                 processFile(program, file)
         });
     } else if (c.nlink !== 0) {
         processOrTrigger(program, processFile)(f)
+    }
+}
+
+const testWatchFn = (program, dir, processFile) => (f, c, p) => {
+    if (typeof f !== 'object' && c.nlink !== 0) {
+        const basename = path.basename(f, '.test.js')
+        let newfilename = path.join(dir, basename);
+
+        if (fs.existsSync(`${newfilename}.ts`)) {
+            processFile(program, `${newfilename}.ts`)
+        }
+
+        if (fs.existsSync(`${newfilename}.js`)) {
+            processFile(program, `${newfilename}.js`)
+        }
     }
 }
 
@@ -62,4 +78,7 @@ export function setupWatch(program, processFile) {
         console.log(chalk.cyan(`\nWatching ${dir}\n`));
 
     watch.watchTree(dir, options, getWatchFn(program, processFile));
-    };
+
+    if (program.testDir && !isChildOf(program.testDir, dir))
+        watch.watchTree(program.testDir, options, testWatchFn(program, dir, processFile))
+};

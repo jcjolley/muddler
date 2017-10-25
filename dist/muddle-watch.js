@@ -4,6 +4,7 @@ const watch = require("watch");
 const chalk_1 = require("chalk");
 const path = require("path");
 const fs = require("fs");
+const utils_1 = require("./utils");
 const getWatchOptions = () => {
     return {
         filter: watchFilter,
@@ -48,12 +49,26 @@ const getWatchFn = (program, processFile) => (f, c, p) => {
         processOrTrigger(program, processFile)(f);
     }
 };
+const testWatchFn = (program, dir, processFile) => (f, c, p) => {
+    if (typeof f !== 'object' && c.nlink !== 0) {
+        const basename = path.basename(f, '.test.js');
+        let newfilename = path.join(dir, basename);
+        if (fs.existsSync(`${newfilename}.ts`)) {
+            processFile(program, `${newfilename}.ts`);
+        }
+        if (fs.existsSync(`${newfilename}.js`)) {
+            processFile(program, `${newfilename}.js`);
+        }
+    }
+};
 function setupWatch(program, processFile) {
     const dir = program.watchDir ? path.normalize(program.watchDir) : process.cwd();
     const options = getWatchOptions();
     if (!program.quiet)
         console.log(chalk_1.default.cyan(`\nWatching ${dir}\n`));
     watch.watchTree(dir, options, getWatchFn(program, processFile));
+    if (program.testDir && !utils_1.isChildOf(program.testDir, dir))
+        watch.watchTree(program.testDir, options, testWatchFn(program, dir, processFile));
 }
 exports.setupWatch = setupWatch;
 ;

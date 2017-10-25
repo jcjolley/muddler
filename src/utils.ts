@@ -30,6 +30,12 @@ export const replaceInStrIfScriptor = (a, b, str) => {
 
 export const anonymizeFirstFunction = str => str.replace(/^.*?\(/, "function(");
 
+export const isChildOf = (child, parent) => {
+    const c = path.resolve(child);
+    const p = path.resolve(parent) 
+    return (c !== p) && p.split(path.sep).every((t, i) => c.split(path.sep)[i] === t)
+}
+
 const getFilenameSansExt = (filename) => {
     const ext = path.extname(filename);
     return path.basename(filename, ext);
