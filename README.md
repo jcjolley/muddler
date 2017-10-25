@@ -10,6 +10,7 @@ Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/article
 #### Added
 - TypeScript testing support!  You can now write .test.ts files instead of test.js files. [#2](https://github.com/jcjolley/muddler/issues/2)
 - Added '-t' option to specify a testing directory.  [#1](https://github.com/jcjolley/muddler/issues/1)
+- Added '-R' option to specify a custom mocha reporter
 
 #### Fixed
 - Temp files are now removed like they should be.
@@ -36,19 +37,17 @@ This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/do
 ## Usage
 
 ```
- Usage: muddle [options] <file to muddle>
-
-  Options:
     -V, --version                output the version number
     -o, --out-file <filename>    the name of the output file
     -w, --watch                  watch the current directory for changes
     -W, --watch-dir <directory>  watch the provided directory for changes
     -d, --out-dir <directory>    what directory to save files to
-    -c, --config <filename>      the location of your config file (defaults to muddle.json in the cwd)
+    -c, --config <filename>      the location of your config file (defaults to muddle.json in the current directory)
     -v, --verbose                increase program verbosity. Good for debugging, or checking for sneaky hacks.
     -q, --quiet                  disable all program output
     -s, --skip-tests             skip tests if they exist
     -t, --test-dir <directory>   the directory to search for tests.
+    -R, --reporter <reporter>    Pass this in if you want to use a different mocha test reporter
     -h, --help                   output usage information
 ```
 

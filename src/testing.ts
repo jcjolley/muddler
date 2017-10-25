@@ -4,7 +4,6 @@ import { cleanup } from './utils'
 import chalk from 'chalk'
 import { transpileTest } from './transpile';
 import * as rm from 'rimraf';
-
 const spawn = require('child-process-promise').spawn;
 
 const testFile = (filename, reporter) => {
@@ -21,6 +20,8 @@ const testFile = (filename, reporter) => {
 };
 
 const getReporter = (program) => {
+    if (program.reporter)
+        return program.reporter
     if (program.verbose)
         return 'spec';
     return 'nyan'

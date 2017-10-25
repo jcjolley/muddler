@@ -27,6 +27,8 @@ const testFile = (filename, reporter) => {
     }
 };
 const getReporter = (program) => {
+    if (program.reporter)
+        return program.reporter;
     if (program.verbose)
         return 'spec';
     return 'nyan';

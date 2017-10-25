@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - TypeScript testing support!  You can now write .test.ts files instead of test.js files.  https://github.com/jcjolley/muddler/issues/2
 - Added '-t' option to specify a testing directory.  https://github.com/jcjolley/muddler/issues/1
+- Added '-R' option to specify a custom mocha reporter
 
 ### Fixed
 - Temp files are now removed like they should be.

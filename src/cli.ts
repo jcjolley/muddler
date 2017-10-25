@@ -16,6 +16,7 @@ export function parseArgs() {
         .option('-q, --quiet', 'disable all program output')
         .option('-s, --skip-tests', 'skip tests if they exist')
         .option('-t, --test-dir <directory>', 'the directory to search for tests.')
+        .option('-R, --reporter <reporter>',  'Pass this in if you want to use a different mocha test reporter')
 
         .parse(process.argv);
 
