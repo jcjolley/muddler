@@ -8,7 +8,7 @@ Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/article
 
 ### [1.5.0](https://github.com/jcjolley/muddler/compare/v1.4.0...v1.5.0) - 2017-10-25
 #### Added
-- TypeScript testing support!  You can now write .test.ts files instead of test.js files.  https://github.com/jcjolley/muddler/issues/2
+- TypeScript testing support!  You can now write .test.ts files instead of test.js files. [#2](https://github.com/jcjolley/muddler/issues/2)
 - Added '-t' option to specify a testing directory.  [#1](https://github.com/jcjolley/muddler/issues/1)
 
 #### Fixed
