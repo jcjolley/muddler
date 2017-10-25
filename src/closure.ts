@@ -4,7 +4,7 @@ import fs = require('fs');
 import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
 const getCompiler = (filename) => new ClosureCompiler({
-    js: `${filename}.temp.js`,
+    js: `${filename.slice(0,-3)}.temp.js`,
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     language_in: 'ECMASCRIPT6',
     language_out: 'ECMASCRIPT6',
@@ -57,8 +57,8 @@ const writeCb = basename => err => {
     }
 }
 
-export async function compile(program, basename) {
-    const compiler = getCompiler(basename);
+export async function compile(program, filename, basename) {
+    const compiler = getCompiler(filename);
     const out = await minify(program, compiler, basename)
     fs.writeFileSync(`${basename}_mud.js`, out, 'utf8')
     }

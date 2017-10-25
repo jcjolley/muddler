@@ -1,7 +1,7 @@
 require("chai").should()
 const fs = require('fs');
 const window = {};
-const code = fs.readFileSync('sample.temp.js', 'utf8').toString()
+const code = fs.readFileSync('examples/sample.temp.js', 'utf8').toString()
 eval(code);
 
 const log_box = [];

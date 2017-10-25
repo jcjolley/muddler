@@ -1,21 +1,18 @@
-import Mocha = require('mocha')
 import fs = require('fs')
 import path = require('path')
-import * as silentReporter from 'mocha-silent-reporter'
 import { cleanup } from './utils'
 import chalk from 'chalk'
+const spawn = require('child-process-promise').spawn;
 
 const testFile = (filename, reporter) => {
     if (filename.includes('.test.js')) {
         const output = [];
-        const mocha = new Mocha({ reporter: reporter });
-        delete require.cache[filename]
-        mocha.addFile(filename);
+        const promise = spawn('mocha', ['-R', reporter, filename], {stdio: "inherit"})
 
         return new Promise((resolve, reject) => {
-            mocha.run(failures => {
-                resolve(failures);
-            })
+            promise
+                .then(() => resolve(0))
+                .catch((err) => {resolve(1) })
         })
     }
 };
@@ -23,9 +20,7 @@ const testFile = (filename, reporter) => {
 const getReporter = (program) => {
     if (program.verbose)
         return 'spec';
-    if (program.quiet)
-        return function reporter(runner) { }
-    return silentReporter
+    return 'nyan'
 }
 
 const getTestName = (program, filename: string, basename) => {
@@ -64,7 +59,7 @@ export async function test(program, filename, basename) {
     if (!program.skipTests) {
         const numFailures = await doTest(program, filename, basename);
         if (numFailures > 0) {
-            console.log(chalk.red(`Failure`) + ' - ' + filename + ` - ` + chalk.bgRed(numFailures) + ` failing test(s)`)
+            console.log(chalk.red(`Failure`) + ' - ' + filename)
             cleanup(filename)
         }
         if (numFailures == -1) {

@@ -17,10 +17,10 @@ function processFile(program, filename) {
         if (!program.quiet)
             console.log(utils_1.muddleStr('Muddling'), filename);
         const basename = utils_1.getOutFilename(program, filename);
-        transpile_1.transpile(program, filename, basename);
+        transpile_1.transpile(program, filename);
         const failed = yield testing_1.test(program, filename, basename);
         if (failed <= 0) {
-            yield closure_1.compile(program, basename);
+            yield closure_1.compile(program, filename, basename);
         }
     });
 }

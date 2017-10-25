@@ -28,7 +28,7 @@ const prepareCode = (code) =>
         nameFirstFunction(
             replaceInStrIfScriptor('#', '$', code)));
 
-export function transpile(program, filename, outFilename) {
+export function transpile(program, filename) {
     const fileStr = fs.readFileSync(filename, 'utf8');
     let preparedCode = prepareCode(fileStr)
 
@@ -39,5 +39,5 @@ export function transpile(program, filename, outFilename) {
     if (program.verbose)
         console.log("Prepared Js: ", preparedCode);
 
-    fs.writeFileSync(`${outFilename}.temp.js`, preparedCode);
+    fs.writeFileSync(`${filename.slice(0,-3)}.temp.js`, preparedCode);
 }

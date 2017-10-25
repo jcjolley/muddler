@@ -9,11 +9,11 @@ export async function processFile(program, filename) {
 
     const basename = getOutFilename(program, filename);
 
-    transpile(program, filename, basename)
+    transpile(program, filename)
 
     const failed = await test(program, filename, basename)
 
     if (failed <= 0) {
-        await compile(program, basename)
+        await compile(program, filename, basename)
     }
 }

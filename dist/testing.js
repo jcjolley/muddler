@@ -8,31 +8,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Mocha = require("mocha");
 const fs = require("fs");
 const path = require("path");
-const silentReporter = require("mocha-silent-reporter");
 const utils_1 = require("./utils");
 const chalk_1 = require("chalk");
+const spawn = require('child-process-promise').spawn;
 const testFile = (filename, reporter) => {
     if (filename.includes('.test.js')) {
         const output = [];
-        const mocha = new Mocha({ reporter: reporter });
-        delete require.cache[filename];
-        mocha.addFile(filename);
+        const promise = spawn('mocha', ['-R', reporter, filename], { stdio: "inherit" });
         return new Promise((resolve, reject) => {
-            mocha.run(failures => {
-                resolve(failures);
-            });
+            promise
+                .then(() => resolve(0))
+                .catch((err) => { resolve(1); });
         });
     }
 };
 const getReporter = (program) => {
     if (program.verbose)
         return 'spec';
-    if (program.quiet)
-        return function reporter(runner) { };
-    return silentReporter;
+    return 'nyan';
 };
 const getTestName = (program, filename, basename) => {
     let test_basename = filename.slice(0, -path.extname(filename).length);
@@ -67,7 +62,7 @@ function test(program, filename, basename) {
         if (!program.skipTests) {
             const numFailures = yield doTest(program, filename, basename);
             if (numFailures > 0) {
-                console.log(chalk_1.default.red(`Failure`) + ' - ' + filename + ` - ` + chalk_1.default.bgRed(numFailures) + ` failing test(s)`);
+                console.log(chalk_1.default.red(`Failure`) + ' - ' + filename);
                 utils_1.cleanup(filename);
             }
             if (numFailures == -1) {

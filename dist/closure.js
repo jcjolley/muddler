@@ -13,7 +13,7 @@ const ClosureCompiler = require('google-closure-compiler').compiler;
 const fs = require("fs");
 const utils_1 = require("./utils");
 const getCompiler = (filename) => new ClosureCompiler({
-    js: `${filename}.temp.js`,
+    js: `${filename.slice(0, -3)}.temp.js`,
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     language_in: 'ECMASCRIPT6',
     language_out: 'ECMASCRIPT6',
@@ -57,9 +57,9 @@ const writeCb = basename => err => {
         console.log(`Error writing ${basename}`, err);
     }
 };
-function compile(program, basename) {
+function compile(program, filename, basename) {
     return __awaiter(this, void 0, void 0, function* () {
-        const compiler = getCompiler(basename);
+        const compiler = getCompiler(filename);
         const out = yield minify(program, compiler, basename);
         fs.writeFileSync(`${basename}_mud.js`, out, 'utf8');
     });

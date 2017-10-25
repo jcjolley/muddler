@@ -23,7 +23,7 @@ const config = {
 const nameFirstFunction = str => str.replace(/^.*\(/, "function muddled(");
 const addToGlobal = str => str + '\nwindow["muddled"] = muddled;';
 const prepareCode = (code) => addToGlobal(nameFirstFunction(utils_1.replaceInStrIfScriptor('#', '$', code)));
-function transpile(program, filename, outFilename) {
+function transpile(program, filename) {
     const fileStr = fs.readFileSync(filename, 'utf8');
     let preparedCode = prepareCode(fileStr);
     const ext = path.extname(filename);
@@ -31,6 +31,6 @@ function transpile(program, filename, outFilename) {
         preparedCode = ts.transpileModule(preparedCode, config).outputText;
     if (program.verbose)
         console.log("Prepared Js: ", preparedCode);
-    fs.writeFileSync(`${outFilename}.temp.js`, preparedCode);
+    fs.writeFileSync(`${filename.slice(0, -3)}.temp.js`, preparedCode);
 }
 exports.transpile = transpile;
