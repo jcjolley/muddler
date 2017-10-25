@@ -22,14 +22,14 @@ const filterStdErr = str => str.split('\n')
     .filter(x => x)
     .join('\n');
 
-const minify = (program, compiler, filename) => {
+const minify = (program, compiler, filename, basename) => {
     return new Promise((resolve, reject) => {
         compiler.run((exitCode, stdOut, stdErr) => {
             if (program.verbose)
                 console.log("Closure Output:", JSON.stringify(stdOut));
 
             const out = restoreHackmud(stdOut);
-            report(program, stdErr, filename)
+            report(program, stdErr, basename)
             cleanup(filename);
             resolve(out);
         })
@@ -59,6 +59,6 @@ const writeCb = basename => err => {
 
 export async function compile(program, filename, basename) {
     const compiler = getCompiler(filename);
-    const out = await minify(program, compiler, basename)
+    const out = await minify(program, compiler, filename, basename)
     fs.writeFileSync(`${basename}_mud.js`, out, 'utf8')
     }
