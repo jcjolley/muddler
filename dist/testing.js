@@ -22,10 +22,7 @@ const testFile = (filename, reporter) => {
         mocha.addFile(filename);
         return new Promise((resolve, reject) => {
             mocha.run(failures => {
-                process.on('exit', (code) => {
-                    resolve(failures);
-                    process.exit(code || failures + 20);
-                });
+                resolve(failures);
             });
         });
     }

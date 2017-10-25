@@ -14,10 +14,7 @@ const testFile = (filename, reporter) => {
 
         return new Promise((resolve, reject) => {
             mocha.run(failures => {
-                process.on('exit', (code) => {
-                    resolve(failures);
-                    process.exit(code || failures + 20)
-                })
+                resolve(failures);
             })
         })
     }
@@ -55,7 +52,7 @@ const doTest = async (program, filename, basename) => {
     const testFilename = getTestName(filename, basename);
     if (testFilename) {
         if (!program.quiet)
-            console.log(chalk.cyanBright('Testing') + ` - ${testFilename}`) 
+            console.log(chalk.cyanBright('Testing') + ` - ${testFilename}`)
         const reporter = getReporter(program);
         const failures = await testFile(testFilename, reporter)
         return failures
