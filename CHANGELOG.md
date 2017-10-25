@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.5.0] - 2017-10-25
+### Added
+- TypeScript testing support!  You can now write .test.ts files instead of test.js files.  
+- Added '-t' option to specify a testing directory
+
+### Fixed
+- Temp files are now removed like they should be
+- Temp files are now created in the same directory as the source script, to make unit testing easier.  
+- -V option returns the correct version now
+- Mocha was caching testing results and returning false positives.  We now run Mocha in a child process, and errors are reported as expected
+
+### Changed
+- We all needed a little more Nyan in our lives.
+- Debounced testing while watching to 2000ms per file so transpiled ts files don't triggler double muddling
+
 ## [1.4.0] - 2017-10-23
 ### Added
 - Support for 'test' directory (must be in the directory you call muddle in).  Tests still need to follow the `<filename>.test.js` format
@@ -21,5 +36,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [All changes](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0)
 
-[Unreleased]: https://github.com/jcjolley/muddler/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/jcjolley/muddler/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/jcjolley/muddler/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0

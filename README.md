@@ -2,23 +2,28 @@
 Transpile, Unit Test, and Minify your [hackmud](https://www.hackmud.com/) scripts ([TypeScript](https://www.typescriptlang.org/) or [JavaScript](https://www.javascript.com/)) with ease.
 Works with hackmud [version 1.4.10](https://hackmud.zendesk.com/hc/en-us/articles/115002750533-1-4-10-Patch-Notes)
 
-## Changelog - most recent entry
+## [Changelog](https://github.com/jcjolley/muddler/blob/master/CHANGELOG.md) - most recent entry
 
 <div style="border: 1px solid grey; padding: 20px">
 
-### [1.4.0](https://github.com/jcjolley/muddler/compare/v1.3.5...v1.4.0) - 2017-10-23
+### [1.5.0](https://github.com/jcjolley/muddler/compare/v1.4.0...v1.5.0) - 2017-10-25
 #### Added
-- Support for 'test' directory (must be in the directory you call muddle in).  Tests still need to follow the `<filename>.test.js` format
-
-#### Changed
-- Moved from manual IIFE and AMD modules to regular TS syntax and compiling to commonjs modules.  I was an idiot.  I've seen the light.
-- Added a create-externs.ts to generate a much more comprehensive externs.js file
-- Broke a few things into smaller functions
+- TypeScript testing support!  You can now write .test.ts files instead of test.js files.  https://github.com/jcjolley/muddler/issues/2
+- Added '-t' option to specify a testing directory.  https://github.com/jcjolley/muddler/issues/1
 
 #### Fixed
-- Bug where tests not in the cwd weren't being picked up by muddle.
+- Temp files are now removed like they should be.
+- Temp files are now created in the same directory as the source script, to make unit testing easier. https://github.com/jcjolley/muddler/issues/3
+- -V option returns the correct version now. https://github.com/jcjolley/muddler/issues/4
+- Mocha was caching testing results and returning false positives.  We now run Mocha in a child process, and errors are reported as expected.
+
+#### Changed
+- We all needed a little more Nyan in our lives.
+- Debounced testing while watching to 2000ms per file so transpiled ts files don't triggler double muddling.
+- Modifying a test while watching re-runs the target file.  https://github.com/jcjolley/muddler/issues/5
 
 Full changelog can be found [here](https://github.com/jcjolley/muddler/blob/master/CHANGELOG.md)
+
 </div>
 
 ## Prerequisites 
