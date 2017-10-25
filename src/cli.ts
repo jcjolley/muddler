@@ -2,9 +2,10 @@ import program = require('commander');
 import { muddleStr } from './utils'
 import path = require('path');
 import fs = require('fs');
+const pjson = require('../package.json')
 
 export function parseArgs() {
-    program.version('0.1.0')
+    program.version(pjson.version)
         .usage('[options] <file to muddle>')
         .option('-o, --out-file <filename>', 'the name of the output file')
         .option('-w, --watch', 'watch the current directory for changes')

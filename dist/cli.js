@@ -4,8 +4,9 @@ const program = require("commander");
 const utils_1 = require("./utils");
 const path = require("path");
 const fs = require("fs");
+const pjson = require('../package.json');
 function parseArgs() {
-    program.version('0.1.0')
+    program.version(pjson.version)
         .usage('[options] <file to muddle>')
         .option('-o, --out-file <filename>', 'the name of the output file')
         .option('-w, --watch', 'watch the current directory for changes')
