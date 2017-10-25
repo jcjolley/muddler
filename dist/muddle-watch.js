@@ -5,6 +5,7 @@ const chalk_1 = require("chalk");
 const path = require("path");
 const fs = require("fs");
 const utils_1 = require("./utils");
+let recentlySeen = [];
 const getWatchOptions = () => {
     return {
         filter: watchFilter,
@@ -22,7 +23,9 @@ const watchFilter = filename => {
     return !reject;
 };
 const processOrTrigger = (program, processFile) => file => {
-    if (file.includes('.test.js')) {
+    if (file.includes('.test.') && !recentlySeen.includes(file)) {
+        recentlySeen.includes(file);
+        setTimeout(() => recentlySeen.filter(f => f !== file), 2000);
         let filename = file.slice(0, -8);
         let jsfile = `${filename}.js`;
         if (fs.existsSync(jsfile)) {
@@ -41,7 +44,7 @@ const getWatchFn = (program, processFile) => (f, c, p) => {
     if (typeof f === 'object') {
         const files = Object.keys(f).slice(1);
         files.forEach(file => {
-            if (!file.includes('.test.js'))
+            if (!file.includes('.test.'))
                 processFile(program, file);
         });
     }
@@ -50,8 +53,10 @@ const getWatchFn = (program, processFile) => (f, c, p) => {
     }
 };
 const testWatchFn = (program, dir, processFile) => (f, c, p) => {
-    if (typeof f !== 'object' && c.nlink !== 0) {
-        const basename = path.basename(f, '.test.js');
+    if (typeof f !== 'object' && c.nlink !== 0 && f.includes('.test.') && !recentlySeen.includes(f)) {
+        recentlySeen.includes(f);
+        setTimeout(() => recentlySeen.filter(file => file !== f), 2000);
+        const basename = f.slice(0, -8);
         let newfilename = path.join(dir, basename);
         if (fs.existsSync(`${newfilename}.ts`)) {
             processFile(program, `${newfilename}.ts`);

@@ -9,7 +9,7 @@ const config = {
         "module": "ES2015",
         "outDir": "dist",
         "moduleResolution": "node",
-        "lib": ["es7", "dom"],
+        "lib": ["es7"],
         "declaration": false,
         "sourceMap": false,
         "removeComments": true,
@@ -40,4 +40,11 @@ export function transpile(program, filename) {
         console.log("Prepared Js: ", preparedCode);
 
     fs.writeFileSync(`${filename.slice(0,-3)}.temp.js`, preparedCode);
+}
+
+export function transpileTest(program, testFileName) {
+    const testConfig = config //{compilerOptions: {...config.compilerOptions, module: 'commonjs'}}
+    const fileStr = fs.readFileSync(testFileName, 'utf8');
+    const transpiledCode = ts.transpileModule(fileStr, testConfig as any).outputText;
+    fs.writeFileSync(`${testFileName.slice(0,-3)}.js`, transpiledCode)
 }

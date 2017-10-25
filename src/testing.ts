@@ -2,6 +2,9 @@ import fs = require('fs')
 import path = require('path')
 import { cleanup } from './utils'
 import chalk from 'chalk'
+import { transpileTest } from './transpile';
+import * as rm from 'rimraf';
+
 const spawn = require('child-process-promise').spawn;
 
 const testFile = (filename, reporter) => {
@@ -30,6 +33,13 @@ const getTestName = (program, filename: string, basename) => {
         return testFilename
     }
 
+    // This might fit better someone else.  I'll have to consider that
+    const testTsFilename = `${test_basename}.test.ts`;
+    if (fs.existsSync(testTsFilename)) {
+        transpileTest(program, testTsFilename)
+        return `${test_basename}.test.js`
+    }
+
     return getTestDirFilename(program, basename)
 }
 
@@ -50,6 +60,9 @@ const doTest = async (program, filename, basename) => {
             console.log(chalk.cyanBright('Testing') + ` - ${testFilename}`)
         const reporter = getReporter(program);
         const failures = await testFile(testFilename, reporter)
+        if (fs.existsSync(`${testFilename.slice(0,-3)}.ts`)) {
+            rm.sync(testFilename)
+        }
         return failures
     }
     return -1

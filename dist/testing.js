@@ -12,6 +12,8 @@ const fs = require("fs");
 const path = require("path");
 const utils_1 = require("./utils");
 const chalk_1 = require("chalk");
+const transpile_1 = require("./transpile");
+const rm = require("rimraf");
 const spawn = require('child-process-promise').spawn;
 const testFile = (filename, reporter) => {
     if (filename.includes('.test.js')) {
@@ -35,6 +37,11 @@ const getTestName = (program, filename, basename) => {
     if (fs.existsSync(testFilename)) {
         return testFilename;
     }
+    const testTsFilename = `${test_basename}.test.ts`;
+    if (fs.existsSync(testTsFilename)) {
+        transpile_1.transpileTest(program, testTsFilename);
+        return `${test_basename}.test.js`;
+    }
     return getTestDirFilename(program, basename);
 };
 const getTestDirFilename = (program, basename) => {
@@ -53,6 +60,9 @@ const doTest = (program, filename, basename) => __awaiter(this, void 0, void 0, 
             console.log(chalk_1.default.cyanBright('Testing') + ` - ${testFilename}`);
         const reporter = getReporter(program);
         const failures = yield testFile(testFilename, reporter);
+        if (fs.existsSync(`${testFilename.slice(0, -3)}.ts`)) {
+            rm.sync(testFilename);
+        }
         return failures;
     }
     return -1;

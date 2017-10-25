@@ -1,11 +1,13 @@
 require("chai").should()
 const fs = require('fs');
+declare var muddled: Function;
+
 const window = {};
 const code = fs.readFileSync('examples/sample.temp.js', 'utf8').toString()
 eval(code);
 
 const log_box = [];
-$fs = {
+const $fs = {
     scripts: {
         lib: () => { 
             return {
