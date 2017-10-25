@@ -6,20 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.5.0] - 2017-10-25
+## [1.5.0](https://github.com/jcjolley/muddler/compare/v1.4.0...v1.5.0) - 2017-10-25
 ### Added
-- TypeScript testing support!  You can now write .test.ts files instead of test.js files.  
-- Added '-t' option to specify a testing directory
+- TypeScript testing support!  You can now write .test.ts files instead of test.js files.  https://github.com/jcjolley/muddler/issues/2
+- Added '-t' option to specify a testing directory.  https://github.com/jcjolley/muddler/issues/1
 
 ### Fixed
-- Temp files are now removed like they should be
-- Temp files are now created in the same directory as the source script, to make unit testing easier.  
-- -V option returns the correct version now
-- Mocha was caching testing results and returning false positives.  We now run Mocha in a child process, and errors are reported as expected
+- Temp files are now removed like they should be.
+- Temp files are now created in the same directory as the source script, to make unit testing easier. https://github.com/jcjolley/muddler/issues/3
+- -V option returns the correct version now. https://github.com/jcjolley/muddler/issues/4
+- Mocha was caching testing results and returning false positives.  We now run Mocha in a child process, and errors are reported as expected.
 
 ### Changed
 - We all needed a little more Nyan in our lives.
-- Debounced testing while watching to 2000ms per file so transpiled ts files don't triggler double muddling
+- Debounced testing while watching to 2000ms per file so transpiled ts files don't triggler double muddling.
+- Modifying a test while watching re-runs the target file.  https://github.com/jcjolley/muddler/issues/5
+
 
 ## [1.4.0] - 2017-10-23
 ### Added
