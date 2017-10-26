@@ -43,8 +43,9 @@ export function transpile(program, filename) {
 }
 
 export function transpileTest(program, testFileName) {
-    const testConfig = config //{compilerOptions: {...config.compilerOptions, module: 'commonjs'}}
+    const testConfig = {compilerOptions: {...config.compilerOptions, module: 'commonjs'}}
     const fileStr = fs.readFileSync(testFileName, 'utf8');
     const transpiledCode = ts.transpileModule(fileStr, testConfig as any).outputText;
-    fs.writeFileSync(`${testFileName.slice(0,-3)}.js`, transpiledCode)
+    const preparedCode = transpiledCode.split('\n').slice(1).join('\n') // remove 'use strict'
+    fs.writeFileSync(`${testFileName.slice(0,-3)}.js`, preparedCode)
 }

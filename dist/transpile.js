@@ -35,9 +35,10 @@ function transpile(program, filename) {
 }
 exports.transpile = transpile;
 function transpileTest(program, testFileName) {
-    const testConfig = config;
+    const testConfig = { compilerOptions: Object.assign({}, config.compilerOptions, { module: 'commonjs' }) };
     const fileStr = fs.readFileSync(testFileName, 'utf8');
     const transpiledCode = ts.transpileModule(fileStr, testConfig).outputText;
-    fs.writeFileSync(`${testFileName.slice(0, -3)}.js`, transpiledCode);
+    const preparedCode = transpiledCode.split('\n').slice(1).join('\n');
+    fs.writeFileSync(`${testFileName.slice(0, -3)}.js`, preparedCode);
 }
 exports.transpileTest = transpileTest;
