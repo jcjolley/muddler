@@ -12,7 +12,7 @@ const config = {
         "lib": ["es7"],
         "declaration": false,
         "sourceMap": false,
-        "removeComments": true,
+        "removeComments": false,
         "isolatedModules": false,
         "strict": false,
         "noImplicitAny": false,
