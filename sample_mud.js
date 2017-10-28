@@ -1,1 +1,0 @@
-function(a,c){a=#fs.scripts.lib();a.log("testing");return a.get_log()}
