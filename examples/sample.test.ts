@@ -20,7 +20,12 @@ const $fs = {
         }
     }
 }
-
+let db = []
+const $db = {
+    i: (arg) => {
+        db.push(arg)
+    }
+}
 
 describe('Sample', () => {
     describe('log', () => {
@@ -28,6 +33,7 @@ describe('Sample', () => {
             const res = muddled()
             log_box.length.should.be.above(0)
             log_box[0].should.equal('testing')
+            db[0]["SID"].should.equal('haxor')
         })
     })
 })

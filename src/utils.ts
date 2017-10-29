@@ -21,7 +21,7 @@ export const getOutFilename = (program, filename) => {
 };
 
 export const replaceInStrIfScriptor = (a, b, str) => {
-    const scriptors = ['s\.', 'fs\.', 'ms\.', 'ls\.', 'ns\.', '4s\.', '3s\.', '2s\.', '1s\.']
+    const scriptors = ['s\.', 'db\.', 'fs\.', 'ms\.', 'ls\.', 'ns\.', '4s\.', '3s\.', '2s\.', '1s\.']
     const lookahead = `(?=${scriptors.join('|')})`
     return str.split('\n')
         .map(line => line.replace(new RegExp(`${a}${lookahead}`, "g"), b))
