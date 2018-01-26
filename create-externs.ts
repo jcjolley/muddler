@@ -111,10 +111,17 @@ const scripts = ['accts.balance',
 "scripts.lib().get_date_utcsecs()",]
 
 const dbs = ['$db', '$db.i()', '$db.r()', '$db.f()', '$db.u()'];
-let out = scripts.map(script => prefixes.map(prefix => `${prefix}.${script}`)) as any
-out = prefixes.concat(out as any)
-out = dbs.concat(out as any);
-out = out.reduce((acc, i) => acc.concat(i), [])
+
+//First we concatinate the database prefixes with 
+let out = dbs.concat(prefixes);
+
+//Then we add the rest of the commands by making a varient for each prefix then adding them to the array of commands
+out = out.concat(
+	//Adding the prefixes to each script
+	scripts.map(script => prefixes.map(prefix=>`${prefix}.${script}`))
+	//Reducing array dimentionallity by one
+	.reduce((acc, i)=>acc.concat(i),[]));
+
 let strOut = out.join(';\n');
-console.log(JSON.stringify(strOut));
-fs.writeFileSync('dist/externs.js', strOut, 'utf8')
+console.log(strOut);
+fs.writeFileSync('dist/externs.js', strOut, 'utf8');
