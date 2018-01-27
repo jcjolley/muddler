@@ -5,19 +5,20 @@ import fs = require('fs');
 const pjson = require('../package.json');
 
 export interface MuddleArgs {
-	outFile?:string,
-	watch?:boolean,
-	watchDir?:string,
-	outDir?:string,
-	config?:string,
-	verbose?:boolean,
-	quiet?:boolean,
-	testDir?:string,
-	reporter?:string,
-	skipTests?:boolean
+	args:string[];
+	outFile?:string;
+	watch?:boolean;
+	watchDir?:string;
+	outDir?:string;
+	config?:string;
+	verbose?:boolean;
+	quiet?:boolean;
+	testDir?:string;
+	reporter?:string;
+	skipTests?:boolean;
 }
 
-export function parseArgs() {
+export function parseArgs(): MuddleArgs {
     program.version(pjson.version)
         .usage('[options] <file to muddle>')
         .option('-o, --out-file <filename>', 'the name of the output file')
@@ -34,20 +35,11 @@ export function parseArgs() {
         .parse(process.argv);
 
 	//We need to wrap the arguments into something that can be read via type.
-	let args:MuddleArgs = {
-		outFile:program.outFile,
-		watch:program.watch,
-		watchDir:program.watchDir,
-		outDir:program.outDir,
-		verbose:program.verbose,
-		quiet:program.quiet,
-		skipTests:program.skipTests,
-		testDir:program.testDir,
-		reporter:program.reporter
-	};
+	//Luckely we can just cast it's type to MuddleArgs as it has the exact same typings as the raw program.
+	let args:MuddleArgs = program as MuddleArgs;
 	
     if (args.verbose && args.quiet) {
-        console.log("Be quiet, AND be verbose, eh?  You're " + muddleStr('drunk') + ".  Go home.");
+        console.log(`Be quiet, AND be verbose, eh?  You're ${muddleStr('drunk')}.  Go home.`);
         process.exit(1);
     }
 
@@ -63,9 +55,9 @@ export function parseArgs() {
 	try {
 		const config = require(configFilename);
         const settings = { ...config, ...program };
-        return settings;
+        return settings as MuddleArgs;
 	}
 	catch(err) {
-		return program;
+		return args;
 	}
 }
