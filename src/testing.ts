@@ -78,7 +78,7 @@ const doTest = async (program: MuddleArgs, filename: string, basename: string): 
     return -1;
 }
 
-export async function test(program: MuddleArgs, filename: string, basename: string) {
+export async function test(program: MuddleArgs, filename: string, basename: string):Promise<number> {
     if (!program.skipTests) {
         const numFailures = await doTest(program, filename, basename);
         if (numFailures > 0) {
@@ -91,5 +91,8 @@ export async function test(program: MuddleArgs, filename: string, basename: stri
             }
         }
         return numFailures
+    }
+    else {
+        return 0;
     }
 }

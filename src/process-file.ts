@@ -12,9 +12,9 @@ export async function processFile(program:MuddleArgs, filename:string) {
 
     transpile(program, filename);
 
-    const failed = await test(program, filename, basename)
+    const failed = await test(program, filename, basename);
 	
-    if (failed && failed <= 0) {
-        await compile(program, filename, basename)
+    if (failed <= 0) {
+        await compile(program, filename, basename);
     }
 }
