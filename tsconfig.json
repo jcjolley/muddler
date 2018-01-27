@@ -7,10 +7,11 @@
     "lib": ["es7", "dom"],              
     "declaration": false,               
     "sourceMap": false,                 
-    "removeComments": true,             
+	"removeComments": true,
+	"inlineSourceMap": true,             
     "isolatedModules": false,           
-    "strict": false,                    
-    "noImplicitAny": false,             
+    "strict": true,                    
+    "noImplicitAny": true,             
     "typeRoots": [
       "./node_modules/@types"
     ],                                  

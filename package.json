@@ -27,6 +27,8 @@
   "author": "jolleyboy",
   "license": "ISC",
   "dependencies": {
+    "@types/rimraf": "^2.0.2",
+    "@types/watch": "^1.0.0",
     "chai": "^4.1.2",
     "chalk": "^2.2.0",
     "child-process-promise": "^2.2.1",
