@@ -112,7 +112,7 @@ const scripts = ['accts.balance',
 
 const dbs = ['$db', '$db.i()', '$db.r()', '$db.f()', '$db.u()'];
 
-//First we concatinate the database prefixes with 
+//First we concatinate the database prefixes regular prefixes.
 let out = dbs.concat(prefixes);
 
 //Then we add the rest of the commands by making a varient for each prefix then adding them to the array of commands

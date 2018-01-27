@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import path = require('path');
 import fs = require('fs');
 import { isChildOf } from './utils';
+import { MuddleArgs } from './cli';
 
 let recentlySeen: string[] = [];
 
@@ -14,7 +15,7 @@ const getWatchOptions = () => {
     };
 };
 
-const watchFilter = filename => {
+const watchFilter = (filename:string): boolean => {
     const ext = path.extname(filename);
 
     if (ext !== '.ts' && ext !== '.js') {
@@ -27,7 +28,7 @@ const watchFilter = filename => {
     return !reject;
 }
 
-const processOrTrigger = (program, processFile) => file => {
+const processOrTrigger = (program: MuddleArgs, processFile:(program:MuddleArgs, file:string)=>void) => (file: string) => {
     if (file.includes('.test.') && !recentlySeen.includes(file)) {
         recentlySeen.includes(file);
         setTimeout(() => recentlySeen.filter(f => f !== file), 2000);
@@ -47,24 +48,25 @@ const processOrTrigger = (program, processFile) => file => {
     }
 }
 
-const getWatchFn = (program, processFile) => (f, c, p) => {
+const getWatchFn = (program: MuddleArgs, processFile:(program:MuddleArgs, file:string)=>void) => (f:watch.FileOrFiles|string, c: fs.Stats, p: fs.Stats) => {
     if (typeof f === 'object') {
-        const files = Object.keys(f).slice(1);
-        files.forEach(file => {
-            if (!file.includes('.test.'))
-                processFile(program, file)
-        });
+		const files = Object.keys(f).slice(1);
+		for(let file of files) {
+			if(!file.includes('.test.')) {
+				processFile(program, file);
+			}
+		}
     } else if (c.nlink !== 0) {
-        processOrTrigger(program, processFile)(f)
+        processOrTrigger(program, processFile)(f);
     }
 }
 
-const testWatchFn = (program, dir, processFile) => (f, c, p) => {
+const testWatchFn = (program: MuddleArgs, dir: string, processFile:(program:MuddleArgs, file:string)=>void) => (f:watch.FileOrFiles|string, c: fs.Stats, p: fs.Stats) => {
     if (typeof f !== 'object' && c.nlink !== 0 && f.includes('.test.') && !recentlySeen.includes(f)) {
         recentlySeen.includes(f);
         setTimeout(() => recentlySeen.filter(file => file !== f), 2000);
 
-        const basename = f.slice(0,-8) 
+        const basename = f.slice(0,-8); 
         let newfilename = path.join(dir, basename);
 
         if (fs.existsSync(`${newfilename}.ts`)) {
@@ -77,13 +79,13 @@ const testWatchFn = (program, dir, processFile) => (f, c, p) => {
     }
 }
 
-export function setupWatch(program, processFile) {
+export function setupWatch(program: MuddleArgs, processFile: (program:MuddleArgs, file:string)=>void) {
     const dir = program.watchDir ? path.normalize(program.watchDir) : process.cwd();
     const options = getWatchOptions()
 
     if (!program.quiet)
-        console.log(chalk.cyan(`\nWatching ${dir}\n`));
-
+		console.log(chalk.cyan(`\nWatching ${dir}\n`));
+	
     watch.watchTree(dir, options, getWatchFn(program, processFile));
 
     if (program.testDir && !isChildOf(program.testDir, dir))

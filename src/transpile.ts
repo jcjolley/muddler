@@ -1,7 +1,9 @@
-import * as ts from 'typescript'
-import { replaceInStrIfScriptor } from './utils'
-import path = require('path')
-import fs = require('fs')
+import fs = require('fs');
+import path = require('path');
+import ts = require('typescript');
+
+import { MuddleArgs } from './cli';
+import { replaceInStrIfScriptor } from './utils';
 
 const config = {
     "compilerOptions": {
@@ -20,15 +22,15 @@ const config = {
     }
 }
 
-const nameFirstFunction = str => str.replace(/^.*\(/, "function muddled(");
-const addToGlobal = str => str + '\nwindow["muddled"] = muddled;';
+const nameFirstFunction = (str: string) => str.replace(/^.*\(/, "function muddled(");
+const addToGlobal = (str: string) => str + '\nwindow["muddled"] = muddled;';
 
-const prepareCode = (code) =>
+const prepareCode = (code: string) =>
     addToGlobal(
         nameFirstFunction(
             replaceInStrIfScriptor('#', '$', code)));
 
-export function transpile(program, filename) {
+export function transpile(program: MuddleArgs, filename: string) {
     const fileStr = fs.readFileSync(filename, 'utf8');
     let preparedCode = prepareCode(fileStr)
 
@@ -42,7 +44,7 @@ export function transpile(program, filename) {
     fs.writeFileSync(`${filename.slice(0,-3)}.temp.js`, preparedCode);
 }
 
-export function transpileTest(program, testFileName) {
+export function transpileTest(program: MuddleArgs, testFileName: string) {
     const testConfig = {compilerOptions: {...config.compilerOptions, module: 'commonjs'}}
     const fileStr = fs.readFileSync(testFileName, 'utf8');
     const transpiledCode = ts.transpileModule(fileStr, testConfig as any).outputText;
