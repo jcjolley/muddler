@@ -1,7 +1,7 @@
-import { $fs, $db } from '../src/hackmud-types/hack-types';
+import { $fs, $db, ScriptReturn } from './hack-types';
 
-function main(context, args) {
-    const l = $fs.scripts.lib();
+function _(context, args):ScriptReturn {
+	const l = $fs.scripts.lib();
     const r = $db.i({"SID":"haxor"});
     l.log('testing');
     return l.get_log();
