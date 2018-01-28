@@ -10,13 +10,18 @@
 	"removeComments": true,             
     "isolatedModules": false,           
     "strict": true,                    
-    "noImplicitAny": true,             
-    "typeRoots": [
-      "./node_modules/@types"
-    ],                                  
+	"noImplicitAny": true,
+	"allowJs": true,                      
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
-  ]
+	"src/**/*",
+	"types/*.d.ts"
+  ],
+  "exclude": [
+	  "node_modules"
+  ],
+  "typeAcquisition": {
+	  "enable": true
+  }
 }
