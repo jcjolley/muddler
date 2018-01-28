@@ -32,7 +32,7 @@ declare module "google-closure-compiler-js" {
 		createSourceMap?:boolean;
 	}
 
-	interface CompileOutput {
+	export interface CompileOutput {
 		compiledCode:string,
 		errors:string[],
 		warnings:string[]
@@ -43,6 +43,7 @@ declare module "google-closure-compiler-js" {
 	export function gulp(): any;
 	export function logger(options: any, output: any, logger: any): any;
 	export function webpack(args: any): void;
+
 
 	export namespace compile {
 		const prototype: {
