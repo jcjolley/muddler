@@ -1,10 +1,13 @@
 import fs = require('fs');
+import tsc = require('typescript');
 import gccJs = require('google-closure-compiler-js');
 
 import { CompileFlags, CompileOutput } from 'google-closure-compiler-js';
+import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
 import { MuddleArgs } from './cli';
-
+import { dirname } from 'path';
+import { rmdir } from 'fs';
 
 enum Severity {
 	normal,
@@ -38,17 +41,21 @@ function mr4Log(str:string, s=Severity.normal):void{
  * Generates flags used for gccJs.
  */
 function getFlags(file:string):CompileFlags {
+	mr4Log(__dirname);
+	mr4Log(fs.readFileSync(file, 'utf8'));
 	return {
 		compilationLevel:'ADVANCED',
 		languageIn:'ECMASCRIPT6',
 		languageOut:'ECMASCRIPT6',
-		externs: [__dirname+'/externs.js']
+		env:'CUSTOM',
+		externs: [__dirname+'/externs.js'],
+		jsCode: [{src:fs.readFileSync(file, 'utf8')}],
+		assumeFunctionWrapper:true
 	};
 }
 /*
 
 import chalk from 'chalk';
-import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
 const ClosureCompiler = require('google-closure-compiler').compiler;
 
@@ -86,19 +93,7 @@ const minify = (program: MuddleArgs, compiler: any, filename: string, basename: 
     })
 }
 
-const restoreHackmud = (stdOut:string) =>
-    anonymizeFirstFunction(
-        replaceInStrIfScriptor('\\\$', '#', stdOut))
-        .slice(0, -2)
-		const report = (program: MuddleArgs, stdErr: string, filename: string) => {
-    const filteredStdErr = filterStdErr(stdErr);
-    if (filteredStdErr) {
-        const separator = "\n==========================================\n"
-        console.error(separator + chalk.red(filteredStdErr) + separator);
-    } else if (!program.quiet) {
-        console.log(chalk.green(`Success`) + ' - ' + chalk.italic(`${filename}_mud.js`));
-    }
-}
+
 
 const writeCb = (basename: string, err: any) => {
     if (err) {
@@ -107,12 +102,36 @@ const writeCb = (basename: string, err: any) => {
 }
 */
 
+//Just a few more simple translations and were done!
+const muddify = (code:string) =>replaceInStrIfScriptor('\\\$', '#', code).replace("'use strict';", '').replace('_(', '(');
+
+/**
+ * Compiles the code and transforms it into a form hackmud can understand.
+ * @todo Fix compile errors.
+ */
 export async function compile(program: MuddleArgs, filename: string, basename: string):Promise<void> {
 
 	mr4Log(filename);
 	mr4Log(basename);
+	let baseDir = dirname(filename);
+	if(filename.endsWith('.ts')){
+		filename = baseDir+'/'+basename+'.temp.js';
+	}
+
+	let code = gccJs.compile(getFlags(filename));
+	if(code.errors.length === 0){
+		mr4Log('Code compiled successfully. \n'+code.compiledCode, Severity.success);
+	}
+	else {
+		mr4Log(`Code compile failure.\n${code.compiledCode}\nErrors:${JSON.stringify(code.errors)}\nWarnings:${code.warnings}`, Severity.error);
+	}
+
+	if(filename.endsWith('.temp.js')){
+		fs.unlink(filename, (err)=>{});
+	}
+
 	return new Promise<void>((resolve, reject)=>{
-		fs.writeFile(`${basename}_mud.js`, '', 'utf8', (err)=>{
+		fs.writeFile(`${baseDir}/${basename}_mud.js`, muddify(code.compiledCode), 'utf8', (err)=>{
 			if(err) {
 				reject(err);
 			}
