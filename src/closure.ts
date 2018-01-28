@@ -1,7 +1,53 @@
 import fs = require('fs');
+import gccJs = require('google-closure-compiler-js');
+
+import { CompileFlags, CompileOutput } from 'google-closure-compiler-js';
+
+import { MuddleArgs } from './cli';
+
+
+enum Severity {
+	normal,
+	success,
+	error
+}
+
+function mr4Log(str:string, s=Severity.normal):void{
+	let face:string = '??/??';
+	let color:number = 255;
+	switch(s){
+		case Severity.normal:
+		color = 202;
+		face = '⠈⠐_⠂⠁';
+		break;
+
+		case Severity.success:
+		color = 208;
+		face = '^^ᵥ^^';
+		break;
+
+		case Severity.error:
+		color = 196;
+		face = ';;ₙ;;';
+		break;
+	}
+	console.log(`\u001b[38;5;${color}m${face} ${str}\u001b[0m`);
+}
+
+/**
+ * Generates flags used for gccJs.
+ */
+function getFlags(file:string):CompileFlags {
+	return {
+		compilationLevel:'ADVANCED',
+		languageIn:'ECMASCRIPT6',
+		languageOut:'ECMASCRIPT6',
+		externs: [__dirname+'/externs.js']
+	};
+}
+/*
 
 import chalk from 'chalk';
-import { MuddleArgs } from './cli';
 import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
 const ClosureCompiler = require('google-closure-compiler').compiler;
@@ -44,8 +90,7 @@ const restoreHackmud = (stdOut:string) =>
     anonymizeFirstFunction(
         replaceInStrIfScriptor('\\\$', '#', stdOut))
         .slice(0, -2)
-
-const report = (program: MuddleArgs, stdErr: string, filename: string) => {
+		const report = (program: MuddleArgs, stdErr: string, filename: string) => {
     const filteredStdErr = filterStdErr(stdErr);
     if (filteredStdErr) {
         const separator = "\n==========================================\n"
@@ -60,9 +105,20 @@ const writeCb = (basename: string, err: any) => {
         console.log(`Error writing ${basename}`, err)
     }
 }
+*/
 
-export async function compile(program: MuddleArgs, filename: string, basename: string) {
-    const compiler = getCompiler(filename);
-    const out = await minify(program, compiler, filename, basename);
-    fs.writeFileSync(`${basename}_mud.js`, out, 'utf8');
+export async function compile(program: MuddleArgs, filename: string, basename: string):Promise<void> {
+
+	mr4Log(filename);
+	mr4Log(basename);
+	return new Promise<void>((resolve, reject)=>{
+		fs.writeFile(`${basename}_mud.js`, '', 'utf8', (err)=>{
+			if(err) {
+				reject(err);
+			}
+			else {
+				resolve();
+			}
+		});
+	});
 }
