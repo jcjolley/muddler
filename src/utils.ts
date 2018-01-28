@@ -4,7 +4,8 @@ import path = require('path');
 import { MuddleArgs } from './cli';
 
 export const cleanup = (filename:string): void => {
-    rm.sync(`${filename.slice(0,-3)}.temp.js`);
+	//No need to wait for deletion of the file. Just delete and swallow.
+	rm(`${filename.slice(0,-3)}.temp.js`, (err)=>{});
 };
 
 function getRandomInt(min: number, max: number): number {
