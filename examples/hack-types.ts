@@ -38,6 +38,8 @@ function generateSecondHandler(args?:string[]){
 
 let scriptorHandler = {
 	get(target:any, propKey:string) {
+		//Now that I think about it, this does nothing.
+		//TODO: Delet this.
 		switch(propKey){
 			case 'accts':
 			return new Proxy(target, generateSecondHandler(['balance', 'transactions', 'xfer_gc_to', 'xfer_gc_to_caller']));
