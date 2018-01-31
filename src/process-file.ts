@@ -4,7 +4,7 @@ import { test } from './testing';
 import { compile } from './closure';
 import { MuddleArgs } from './cli';
 
-export async function processFile(program:MuddleArgs, filename:string) {
+export async function processFile(program:MuddleArgs, filename:string): Promise<void> {
     if (!program.quiet)
         console.log(muddleStr('Muddling'), filename);
 
