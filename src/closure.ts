@@ -1,13 +1,13 @@
 import fs = require('fs');
 import tsc = require('typescript');
-import gccJs = require('google-closure-compiler-js');
 
-import { CompileFlags, CompileOutput } from 'google-closure-compiler-js';
+import { minify, MinifyOutput, MinifyOptions } from 'uglify-es';
 import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
-import { MuddleArgs } from './cli';
-import { dirname } from 'path';
 import { rmdir } from 'fs';
+import { MuddleArgs } from './cli';
+import { dirname, basename } from 'path';
+import { isUndefined } from 'util';
 
 enum Severity {
 	normal,
@@ -40,17 +40,23 @@ function mr4Log(str:string, s=Severity.normal):void{
 /**
  * Generates flags used for gccJs.
  */
-function getFlags(file:string):CompileFlags {
+function getFlags(file:string) {
 	mr4Log(__dirname);
-	mr4Log(fs.readFileSync(file, 'utf8'));
+	let code = fs.readFileSync(file, 'utf8');
+	mr4Log(code);
+	let external = fs.readFileSync(__dirname+'/hackmud-types/hack-types.js', 'utf8');
+	mr4Log(external);
 	return {
-		compilationLevel:'ADVANCED',
+		env:'CUSTOM',
+		newTypeInf:true,
+		jsCode: [{src:code, path:file}],
 		languageIn:'ECMASCRIPT6',
 		languageOut:'ECMASCRIPT6',
-		env:'CUSTOM',
-		externs: [__dirname+'/externs.js'],
-		jsCode: [{src:fs.readFileSync(file, 'utf8')}],
-		assumeFunctionWrapper:true
+		externs: [{src:external, path:dirname(file)+'/hack-types.js'}],
+		assumeFunctionWrapper:true,
+		compilationLevel:'SIMPLE',
+		processCommonJsModules:true,
+		warningLevel:'VERBOSE'
 	};
 }
 /*
@@ -110,28 +116,30 @@ const muddify = (code:string) =>replaceInStrIfScriptor('\\\$', '#', code).replac
  * @todo Fix compile errors.
  */
 export async function compile(program: MuddleArgs, filename: string, basename: string):Promise<void> {
-
-	mr4Log(filename);
-	mr4Log(basename);
 	let baseDir = dirname(filename);
 	if(filename.endsWith('.ts')){
 		filename = baseDir+'/'+basename+'.temp.js';
 	}
+	let code = fs.readFileSync(filename, 'utf8');
+	let compiled = minify(code, {
+		warnings:true,
+		ecma: 6,
+		compress: {
+			unsafe: true,
+			unsafe_arrows: true,
+			unsafe_math: true
+		}
+	});
 
-	let code = gccJs.compile(getFlags(filename));
-	if(code.errors.length === 0){
-		mr4Log('Code compiled successfully. \n'+code.compiledCode, Severity.success);
-	}
-	else {
-		mr4Log(`Code compile failure.\n${code.compiledCode}\nErrors:${JSON.stringify(code.errors)}\nWarnings:${code.warnings}`, Severity.error);
-	}
+	let compiledCode = compiled.code;
 
-	if(filename.endsWith('.temp.js')){
+
+	if(filename.endsWith('.temp.js')) {
 		fs.unlink(filename, (err)=>{});
 	}
 
 	return new Promise<void>((resolve, reject)=>{
-		fs.writeFile(`${baseDir}/${basename}_mud.js`, muddify(code.compiledCode), 'utf8', (err)=>{
+		fs.writeFile(`${baseDir}/${basename}_mud.js`, muddify(compiledCode), 'utf8', (err)=>{
 			if(err) {
 				reject(err);
 			}
