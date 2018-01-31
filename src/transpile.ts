@@ -19,7 +19,7 @@ const config:ts.TranspileOptions = {
 		isolatedModules:false,
 		strict:false,
 		noImplicitAny:false,
-		skipLibCheck:true
+		skipLibCheck:false
 	}
 }
 const nameFirstFunction = (str: string) => str.replace(/^.*\(/, "function muddled(");
@@ -29,7 +29,7 @@ const removeImports = (str: string) => str.replace(/import .+[;\n\r]/g, '');
 const prepareCode = (code: string) =>
 removeImports(
 	nameFirstFunction(
-			replaceInStrIfScriptor('#', '$', code)));
+			replaceInStrIfScriptor('#', '$', code)).replace('./hack-types', './hack-types.js'));
 
 export function transpile(program: MuddleArgs, filename: string) {
     const fileStr = fs.readFileSync(filename, 'utf8');
