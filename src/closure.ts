@@ -59,54 +59,6 @@ function getFlags(file:string) {
 		warningLevel:'VERBOSE'
 	};
 }
-/*
-
-import chalk from 'chalk';
-
-const ClosureCompiler = require('google-closure-compiler').compiler;
-
-const getCompiler = (filename: string) => new ClosureCompiler({
-    js: `${filename.slice(0,-3)}.temp.js`,
-    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-    language_in: 'ECMASCRIPT6',
-    language_out: 'ECMASCRIPT6',
-    externs: __dirname + '/externs.js',
-    warning_level: 'QUIET',
-});
-
-const isNotWarning = (str: string) => {
-    const warningIndicators = ['WARNING: Skipping', 'factory features:', 'compiler features:', 'java -jar ', 'com.google.javascript.jscomp.PhaseOptimizer$NamedPass process'];
-    return !warningIndicators.some(w => str.includes(w));
-};
-
-const filterStdErr = (str: string) => str.split('\n')
-    .filter(isNotWarning)
-    .filter(x => x)
-    .join('\n');
-
-const minify = (program: MuddleArgs, compiler: any, filename: string, basename: string) => {
-    return new Promise((resolve, reject) => {
-        compiler.run((exitCode:number, stdOut:string, stdErr:string) => {
-            if (program.verbose) {
-                console.log("Closure Output:", JSON.stringify(stdOut));
-			}
-
-            const out = restoreHackmud(stdOut);
-            report(program, stdErr, basename)
-            cleanup(filename);
-            resolve(out);
-        })
-    })
-}
-
-
-
-const writeCb = (basename: string, err: any) => {
-    if (err) {
-        console.log(`Error writing ${basename}`, err)
-    }
-}
-*/
 
 //Just a few more simple translations and were done!
 const muddify = (code:string) =>replaceInStrIfScriptor('\\\$', '#', code).replace("'use strict';", '').replace('_(', '(');
