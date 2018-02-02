@@ -340,7 +340,7 @@ declare module 'uglify-es' {
 			 * Pass true to wrap immediately invoked function expressions.
 			 */
 			wrap_iife?: boolean;
-			//#Start of shit not added yet#
+			
 			/**
 			 * Start indentation on every line (only when `beautify`)
 			 */
