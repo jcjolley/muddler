@@ -42,7 +42,6 @@ const getTestName = (program: MuddleArgs, filename: string, basename: string) =>
     }
 
 	// This might fit better someone else.  I'll have to consider that
-	// You do realize that code comments are used to...you know..comment on your code? Not just to set reminders?
     const testTsFilename = `${test_basename}.test.ts`;
     if (fs.existsSync(testTsFilename)) {
         transpileTest(program, testTsFilename);
