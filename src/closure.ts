@@ -22,9 +22,8 @@ const muddify = (code:string) =>replaceInStrIfScriptor('\\\$', '#', code).replac
  * Compiles the code and transforms it into a form hackmud can understand.
  */
 export async function compile(program: MuddleArgs, filename: string, basename: string):Promise<void> {
-	let baseDir = dirname(filename);
 	if(filename.endsWith('.ts')){
-		filename = baseDir+'/'+basename+'.temp.js';
+		filename = basename+'.temp.js';
 	}
 	let code = fs.readFileSync(filename, 'utf8');
 	let compiled = minify(code, {
@@ -34,6 +33,9 @@ export async function compile(program: MuddleArgs, filename: string, basename: s
 			unsafe: true,
 			unsafe_arrows: true,
 			unsafe_math: true
+		},
+		output: {
+			comments: true
 		}
 	});
 
@@ -45,7 +47,7 @@ export async function compile(program: MuddleArgs, filename: string, basename: s
 	}
 
 	return new Promise<void>((resolve, reject)=>{
-		fs.writeFile(`${baseDir}/${basename}_mud.js`, muddify(compiledCode), 'utf8', (err)=>{
+		fs.writeFile(`${basename}_mud.js`, muddify(compiledCode), 'utf8', (err)=>{
 			if(err) {
 				reject(err);
 			}
