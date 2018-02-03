@@ -35,10 +35,14 @@ export async function compile(program: MuddleArgs, filename: string, basename: s
 			unsafe_math: true
 		},
 		output: {
-			comments: true
+			comments: false
 		}
 	});
 
+	if(compiled.error) {
+		console.error(compiled.error);
+		return;
+	}
 	let compiledCode = compiled.code;
 
 
