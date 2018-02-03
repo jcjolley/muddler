@@ -1,1 +1,0 @@
-'use strict';function _$$module$Input_0(context,args){const l=module$__$src$hackmud_types$hack_types.$fs.scripts.lib();const r=module$__$src$hackmud_types$hack_types.$db.i({"SID":"haxor"});l.log("testing");return l.get_log()}window["muddled"]=muddled;
