@@ -25,7 +25,10 @@ const $db = {
 describe('Sample', () => {
     describe('log', () => {
         it('should add an item to the log', () => {
-            const res = muddled();
+
+			// This represents the main function.
+			// Used underscore to represent how it's supposed to be empty (and to survive mangling from UglifyJS)
+            const res = _();
             log_box.length.should.be.above(0);
             log_box[0].should.equal('testing');
             db[0]["SID"].should.equal('haxor');

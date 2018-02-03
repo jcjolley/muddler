@@ -22,8 +22,7 @@ const config:ts.TranspileOptions = {
 		skipLibCheck:false
 	}
 }
-const nameFirstFunction = (str: string) => str.replace(/^.*\(/, "function muddled(");
-const addToGlobal = (str: string) => str + '\nwindow["muddled"] = muddled;';
+const nameFirstFunction = (str: string) => str.replace(/^.*\(/, "function _(");
 const removeImports = (str: string) => str.replace(/import .+[;\n\r]/g, '');
 
 const prepareCode = (code: string) =>
@@ -33,7 +32,7 @@ removeImports(
 
 export function transpile(program: MuddleArgs, filename: string) {
     const fileStr = fs.readFileSync(filename, 'utf8');
-    let preparedCode = prepareCode(fileStr)
+    let preparedCode = prepareCode(fileStr);
 
     const ext = path.extname(filename);
     if (ext === '.ts')
