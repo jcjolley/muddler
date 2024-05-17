@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import {parseArgs} from './cli'
-import {setupWatch} from './muddle-watch'
+import { parseArgs } from './cli'
+import { setupWatch } from './muddle-watch'
 import { processFile } from './process-file'
 
-function main() {
+function main():void {
     const program = parseArgs();
     let filename = program.args[0];
 

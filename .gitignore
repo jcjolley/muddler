@@ -1,2 +1,7 @@
 node_modules/
 .vscode
+dist/
+my_scripts/
+
+# Documentation is generated using typedoc.
+docs/

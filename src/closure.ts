@@ -1,64 +1,63 @@
-import chalk from 'chalk';
-const ClosureCompiler = require('google-closure-compiler').compiler;
 import fs = require('fs');
+import tsc = require('typescript');
+
+import { minify, MinifyOutput, MinifyOptions } from 'uglify-es';
 import { cleanup, anonymizeFirstFunction, replaceInStrIfScriptor } from './utils'
 
-const getCompiler = (filename) => new ClosureCompiler({
-    js: `${filename.slice(0,-3)}.temp.js`,
-    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-    language_in: 'ECMASCRIPT6',
-    language_out: 'ECMASCRIPT6',
-    externs: __dirname + '/externs.js',
-    warning_level: 'QUIET',
-});
+import { rmdir } from 'fs';
+import { MuddleArgs } from './cli';
+import { dirname, basename } from 'path';
+import { isUndefined } from 'util';
 
-const isNotWarning = (str) => {
-    const warningIndicators = ['WARNING: Skipping', 'factory features:', 'compiler features:', 'java -jar ', 'com.google.javascript.jscomp.PhaseOptimizer$NamedPass process'];
-    return !warningIndicators.some(w => str && str.includes(w));
-};
-
-const filterStdErr = str => str.split('\n')
-    .filter(isNotWarning)
-    .filter(x => x)
-    .join('\n');
-
-const minify = (program, compiler, filename, basename) => {
-    return new Promise((resolve, reject) => {
-        compiler.run((exitCode, stdOut, stdErr) => {
-            if (program.verbose)
-                console.log("Closure Output:", JSON.stringify(stdOut));
-
-            const out = restoreHackmud(stdOut);
-            report(program, stdErr, basename)
-            cleanup(filename);
-            resolve(out);
-        })
-    })
+enum Severity {
+	normal,
+	success,
+	error
 }
 
-const restoreHackmud = stdOut =>
-    anonymizeFirstFunction(
-        replaceInStrIfScriptor('\\\$', '#', stdOut))
-        .slice(0, -2)
+//Just a few more simple translations and were done!
+const muddify = (code:string) =>replaceInStrIfScriptor('\\\$', '#', code).replace("'use strict';", '').replace('_(', '(');
 
-const report = (program, stdErr, filename) => {
-    const filteredStdErr = filterStdErr(stdErr);
-    if (filteredStdErr) {
-        const separator = "\n==========================================\n"
-        console.error(separator + chalk.red(filteredStdErr) + separator);
-    } else if (!program.quiet) {
-        console.log(chalk.green(`Success`) + ' - ' + chalk.italic(`${filename}_mud.js`));
-    }
+/**
+ * Compiles the code and transforms it into a form hackmud can understand.
+ */
+export async function compile(program: MuddleArgs, filename: string, basename: string):Promise<void> {
+	if(filename.endsWith('.ts')){
+		filename = basename+'.temp.js';
+	}
+	let code = fs.readFileSync(filename, 'utf8');
+	let compiled = minify(code, {
+		warnings:true,
+		ecma: 6,
+		compress: {
+			unsafe: true,
+			unsafe_arrows: true,
+			unsafe_math: true
+		},
+		output: {
+			comments: false
+		}
+	});
+
+	if(compiled.error) {
+		console.error(compiled.error);
+		return;
+	}
+	let compiledCode = compiled.code;
+
+
+	if(filename.endsWith('.temp.js')) {
+		fs.unlink(filename, (err)=>{});
+	}
+
+	return new Promise<void>((resolve, reject)=>{
+		fs.writeFile(`${basename}_mud.js`, muddify(compiledCode), 'utf8', (err)=>{
+			if(err) {
+				reject(err);
+			}
+			else {
+				resolve();
+			}
+		});
+	});
 }
-
-const writeCb = basename => err => {
-    if (err) {
-        console.log(`Error writing ${basename}`, err)
-    }
-}
-
-export async function compile(program, filename, basename) {
-    const compiler = getCompiler(filename);
-    const out = await minify(program, compiler, filename, basename)
-    fs.writeFileSync(`${basename}_mud.js`, out, 'utf8')
-    }

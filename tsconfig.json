@@ -6,17 +6,22 @@
     "moduleResolution": "node",         
     "lib": ["es7", "dom"],              
     "declaration": false,               
-    "sourceMap": false,                 
-    "removeComments": true,             
+    "sourceMap": true,                 
+	"removeComments": true,             
     "isolatedModules": false,           
-    "strict": false,                    
-    "noImplicitAny": false,             
-    "typeRoots": [
-      "./node_modules/@types"
-    ],                                  
+    "strict": true,                    
+	"noImplicitAny": true,
+	"allowJs": true,                      
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
-  ]
+	"src/**/*",
+	"types/*.d.ts"
+  ],
+  "exclude": [
+	  "node_modules"
+  ],
+  "typeAcquisition": {
+	  "enable": true
+  }
 }

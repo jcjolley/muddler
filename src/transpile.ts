@@ -1,40 +1,42 @@
-import * as ts from 'typescript'
-import { replaceInStrIfScriptor } from './utils'
-import path = require('path')
-import fs = require('fs')
+import fs = require('fs');
+import path = require('path');
+import ts = require('typescript');
 
-const config = {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "ES2015",
-        "outDir": "dist",
-        "moduleResolution": "node",
-        "lib": ["es7"],
-        "declaration": false,
-        "sourceMap": false,
-        "removeComments": false,
-        "isolatedModules": false,
-        "strict": false,
-        "noImplicitAny": false,
-        "skipLibCheck": true
-    }
+import { MuddleArgs } from './cli';
+import { replaceInStrIfScriptor } from './utils';
+
+
+const config:ts.TranspileOptions = {
+	compilerOptions:{
+		target:ts.ScriptTarget.ES2015,
+		module:ts.ModuleKind.ES2015,
+		outDir:'dist',
+		moduleResolution:ts.ModuleResolutionKind.NodeJs,
+		lib:['es7'],
+		declaration:false,
+		sourceMap:false,
+		removeComments:false,
+		isolatedModules:false,
+		strict:false,
+		noImplicitAny:false,
+		skipLibCheck:false
+	}
 }
+const nameFirstFunction = (str: string) => str.replace(/^.*\(/, "function _(");
+const removeImports = (str: string) => str.replace(/import .+[;\n\r]/g, '');
 
-const nameFirstFunction = str => str.replace(/^.*\(/, "function muddled(");
-const addToGlobal = str => str + '\nwindow["muddled"] = muddled;';
+const prepareCode = (code: string) =>
+removeImports(
+	nameFirstFunction(
+			replaceInStrIfScriptor('#', '$', code)).replace('./hack-types', './hack-types.js'));
 
-const prepareCode = (code) =>
-    addToGlobal(
-        nameFirstFunction(
-            replaceInStrIfScriptor('#', '$', code)));
-
-export function transpile(program, filename) {
+export function transpile(program: MuddleArgs, filename: string) {
     const fileStr = fs.readFileSync(filename, 'utf8');
-    let preparedCode = prepareCode(fileStr)
+    let preparedCode = prepareCode(fileStr);
 
     const ext = path.extname(filename);
     if (ext === '.ts')
-        preparedCode = ts.transpileModule(preparedCode, config as any).outputText;
+        preparedCode = ts.transpileModule(preparedCode, config).outputText;
 
     if (program.verbose)
         console.log("Prepared Js: ", preparedCode);
@@ -42,7 +44,7 @@ export function transpile(program, filename) {
     fs.writeFileSync(`${filename.slice(0,-3)}.temp.js`, preparedCode);
 }
 
-export function transpileTest(program, testFileName) {
+export function transpileTest(program: MuddleArgs, testFileName: string) {
     const testConfig = {compilerOptions: {...config.compilerOptions, module: 'commonjs'}}
     const fileStr = fs.readFileSync(testFileName, 'utf8');
     const transpiledCode = ts.transpileModule(fileStr, testConfig as any).outputText;

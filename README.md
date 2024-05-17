@@ -27,9 +27,6 @@ Full changelog can be found [here](https://github.com/jcjolley/muddler/blob/mast
 
 </div>
 
-## Prerequisites 
-This project requires [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) and [Google's Closure Compiler](https://dl.google.com/closure-compiler/compiler-latest.zip) on your [PATH](http://windowsitpro.com/systems-management/how-can-i-add-new-folder-my-system-path) to function.
-
 ## Installation
 
 `npm install muddler -g`
